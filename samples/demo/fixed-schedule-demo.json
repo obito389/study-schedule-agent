@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "now": "2026-09-20T00:00:00Z",
+  "timezone": "Asia/Shanghai",
+  "courses": [
+    {
+      "schemaVersion": 1,
+      "id": "c1",
+      "code": "CS201",
+      "title": "数据结构",
+      "weeklyTimeBlocks": [
+        {
+          "schemaVersion": 1,
+          "id": "L1",
+          "start": "2026-09-20T09:00:00Z",
+          "end": "2026-09-20T11:00:00Z",
+          "locked": true,
+          "label": "周一 09:00-11:00 数据结构"
+        }
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "schemaVersion": 1,
+      "id": "t1",
+      "title": "完成作业一",
+      "courseId": "c1",
+      "deadline": "2026-09-21T00:00:00Z",
+      "durationMinutes": 90,
+      "priority": 3,
+      "state": "PENDING",
+      "scheduledBlock": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "t2",
+      "title": "复习英语单词",
+      "courseId": null,
+      "deadline": "2026-09-21T00:00:00Z",
+      "durationMinutes": 60,
+      "priority": 1,
+      "state": "PENDING",
+      "scheduledBlock": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "t3",
+      "title": "组会准备",
+      "courseId": null,
+      "deadline": "2026-09-22T00:00:00Z",
+      "durationMinutes": 120,
+      "priority": 5,
+      "state": "PENDING",
+      "scheduledBlock": null
+    }
+  ],
+  "lockedBlocks": [],
+  "activeFacts": [
+    {
+      "schemaVersion": 1,
+      "key": "daily.cap.minutes",
+      "value": "480",
+      "scope": "GLOBAL",
+      "strength": 1.0,
+      "source": "USER_INPUT",
+      "state": "ACTIVE",
+      "evidenceIds": [],
+      "version": 1
+    }
+  ],
+  "planningRevision": 1
+}

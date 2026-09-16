@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 0,
+  "requestKey": "req-003",
+  "kind": "TEXT",
+  "title": "过期版本样例",
+  "courseCandidate": "数据库",
+  "deadline": "2026-10-10T12:00:00Z",
+  "durationMinutes": 90,
+  "sourceEvidence": [],
+  "ambiguities": []
+}

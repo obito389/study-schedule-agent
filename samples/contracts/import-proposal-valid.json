@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "requestKey": "req-001",
+  "kind": "TEXT",
+  "title": "数据结构期末作业",
+  "courseCandidate": "数据结构",
+  "deadline": "2026-10-01T12:00:00Z",
+  "durationMinutes": 120,
+  "sourceEvidence": ["chat://2026-09-09/msg-1"],
+  "ambiguities": ["作业是个人完成还是小组完成？"]
+}

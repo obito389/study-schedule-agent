@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "operationKey": "op-002",
+  "baseRevision": 1,
+  "type": "EXPLODE",
+  "status": "PENDING",
+  "targets": [],
+  "changes": {},
+  "authorizationScope": "AUTO",
+  "reasonFacts": []
+}

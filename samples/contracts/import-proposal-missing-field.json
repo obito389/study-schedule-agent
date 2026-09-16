@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "requestKey": "req-002",
+  "kind": "TEXT",
+  "courseCandidate": "操作系统",
+  "deadline": "2026-10-05T12:00:00Z",
+  "durationMinutes": 60,
+  "sourceEvidence": [],
+  "ambiguities": []
+}

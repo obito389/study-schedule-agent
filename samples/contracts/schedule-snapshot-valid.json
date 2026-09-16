@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "now": "2026-09-16T08:00:00Z",
+  "timezone": "Asia/Shanghai",
+  "courses": [
+    {
+      "schemaVersion": 1,
+      "id": "c1",
+      "code": "CS201",
+      "title": "数据结构",
+      "weeklyTimeBlocks": [
+        {
+          "schemaVersion": 1,
+          "id": "b1",
+          "start": "2026-09-21T01:00:00Z",
+          "end": "2026-09-21T03:00:00Z",
+          "locked": true,
+          "label": "周一 09:00-11:00 上课"
+        }
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "schemaVersion": 1,
+      "id": "t1",
+      "title": "完成作业一",
+      "courseId": "c1",
+      "deadline": "2026-09-25T12:00:00Z",
+      "durationMinutes": 90,
+      "priority": 3,
+      "state": "PENDING",
+      "scheduledBlock": null
+    }
+  ],
+  "lockedBlocks": [],
+  "activeFacts": [],
+  "planningRevision": 3
+}

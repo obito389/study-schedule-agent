@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "key": "duration.factor.data-structures",
+  "value": "1.2",
+  "scope": "COURSE:CS201",
+  "strength": 0.7,
+  "source": "OBSERVED",
+  "state": "ACTIVE",
+  "evidenceIds": ["fb-001", "fb-002", "fb-003"],
+  "version": 2
+}

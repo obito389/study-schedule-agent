@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "operationKey": "op-001",
+  "baseRevision": 3,
+  "type": "CREATE_TASK",
+  "status": "NEEDS_CONFIRMATION",
+  "targets": ["t1"],
+  "changes": {
+    "title": "完成作业一",
+    "durationMinutes": 90
+  },
+  "authorizationScope": "USER_CONFIRMED",
+  "reasonFacts": []
+}
