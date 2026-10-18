@@ -36,10 +36,24 @@ plans/
 
 ## 当前状态
 
-项目已创建 Java 21/Spring Boot 后端工程，冻结四个跨模块契约，并完成硬约束校验、确定性贪心排程、受控 Agent 动作生成和证据化用户模型。正常及异常联调样例位于 `samples/contracts`；执行器交接包覆盖版本冲突、幂等和撤销语义，固定离线样例已贯通排程、动作预览与耗时反馈。导入模块已提供截图、录音和文字来源的统一接收、Mock 识别、状态查询、幂等提交与确认端口，联调样例位于 `samples/importing`。已补充识别与提交失败恢复、确认校验及导入到 Agent 排程的离线联调测试。当前完整测试为 58 个；下一步由业务持久化模块替换内存提交端口，并补齐真实模型适配和前端演示链路。
+2026-10-18 已形成最小完整交付首版：Vue 前端、JPA/Flyway 数据持久化、事务执行器、课程/任务/固定时段、导入校对、排程预览与确认、日历、偏好、耗时反馈和安全撤销均已接通。默认本地单用户，导入识别明确使用 Mock。H2 与真实 MySQL 8 上均通过 71 项后端测试，另有 5 项前端单测、2 条浏览器端到端用例及服务重启持久化验收。
+
+## 启动与验收
+
+在项目根目录打开两个终端：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/start-backend.ps1
+powershell -ExecutionPolicy Bypass -File scripts/start-frontend.ps1
+```
+
+后端 http://127.0.0.1:8080，开发前端 http://127.0.0.1:5173。默认文件数据库无需账号，数据保留在 `backend/data`。单 JAR 交付运行时不需要 Node；用 `scripts/build-delivery.ps1` 打包，访问同一个后端地址即可使用内嵌前端。
+
+完整启动、MySQL 配置、五分钟演示和范围说明见 [交付说明](docs/delivery/README.md)，验收证据见 [测试报告](docs/delivery/test-report.md)。当前没有真实 OCR/ASR、云模型或多用户公网鉴权，后续可接组员实现。
 
 ## 文档
 
 - [项目技术和编码约定](agent.md)
 - [熊翔开发计划](planning.md)
 - [多模态导入接口样例](samples/importing/README.md)
+- [前后端 API 交接](docs/delivery/api.md)
