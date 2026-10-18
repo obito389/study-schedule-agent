@@ -1207,3 +1207,102 @@ td strong {
     font-size: 14px;
   }
 }
+textarea {
+  font: inherit;
+  width: 100%;
+  border: 1px solid #dce1e9;
+  border-radius: 8px;
+  padding: 14px;
+  line-height: 1.9;
+  resize: vertical;
+  color: var(--ink);
+  background: #fbfcff;
+  outline: none;
+}
+textarea:focus {
+  border-color: #7898dd;
+  box-shadow: 0 0 0 3px #edf2fc;
+}
+.ai-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+  gap: 24px;
+  align-items: start;
+}
+.ai-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.ai-examples button {
+  text-align: left;
+  background: #f5f8fe;
+  border: 1px solid #e7eefb;
+  color: #728bb9;
+  border-radius: 7px;
+  font-size: 11px;
+  line-height: 1.8;
+  padding: 11px 13px;
+}
+.ai-reasons {
+  border-left: 3px solid #7898dd;
+  padding: 2px 0 2px 15px;
+  margin-bottom: 24px;
+}
+.ai-reasons p {
+  font-size: 12px;
+  color: #6d7d97;
+  margin: 8px 0;
+}
+.ai-task-card {
+  background: #f5f8fe;
+  border: 1px solid #e1eafa;
+  border-radius: 9px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.ai-task-card h3 {
+  font-size: 18px;
+  margin: 10px 0;
+}
+.ai-task-card > div {
+  font-size: 12px;
+  color: #8295b7;
+  line-height: 2;
+}
+.ai-result > .primary {
+  width: 100%;
+  margin-top: 10px;
+}
+.ai-entry {
+  display: block;
+  padding: 16px 20px;
+  border: 1px solid #dfe7f6;
+  background: #eef3fd;
+  border-radius: 9px;
+  font-size: 13px;
+  color: #5578bd;
+  margin-bottom: 22px;
+}
+@media (max-width: 1000px) {
+  .ai-layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 760px) {
+  nav {
+    flex-wrap: wrap;
+  }
+  nav a {
+    flex: 1 0 28%;
+    justify-content: flex-start;
+  }
+  .ai-layout {
+    gap: 0;
+  }
+  .ai-result .preview-row > span:last-child {
+    margin-left: 0;
+    display: block;
+    width: 100%;
+  }
+}

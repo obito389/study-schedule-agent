@@ -1,6 +1,6 @@
 # 最小完整版本测试记录
 
-测试日期：2026-10-18（Asia/Shanghai）。本报告对应 codex/minimum-complete 工作分支。
+测试日期：2026-10-19（Asia/Shanghai）。本报告对应 codex/minimum-complete 工作分支。
 
 ## 环境
 
@@ -14,16 +14,16 @@
 
 | 检查 | 结果 |
 |---|---|
-| 后端完整测试，H2 MySQL 兼容模式 | 71 项通过，0 失败 |
-| 后端完整测试，真实 MySQL 8.0.46 | 同一套 71 项通过，0 失败；其中 13 项为新增数据库/API 集成测试 |
+| 后端完整测试，H2 MySQL 兼容模式 | 84 项通过，0 失败 |
+| 后端完整测试，真实 MySQL 8.0.46 | 同一套 84 项通过，0 失败；其中 13 项为原数据库/API 集成测试，新增 13 项 AI 适配及集成测试 |
 | 前端 Vitest 时间与事件映射 | 5 项通过 |
 | 前端 vue-tsc 类型检查 + Vite 生产构建 | 通过 |
-| Playwright 浏览器完整流程 | 2 项通过，无页面脚本异常 |
+| Playwright 浏览器完整流程 | 3 项通过，无页面脚本异常 |
 | H2 文件库重启持久化 | 通过：任务、revision 和原执行回执均保留，重放不重复写入 |
 | npm audit --omit=dev（官方 registry） | 运行依赖 0 条已知漏洞；这是当次扫描结果 |
 | 内嵌前端 JAR 构建 | 通过，提供独立打包脚本 |
 
-两次数据库回归运行同一套测试，不能相加宣称为 142 个不同用例。测试日志保存在 backend/target/full-test.log 和 mysql-test.log；前端日志与截图在 frontend/test-results 和 e2e-check.log。target/node_modules 等生成目录不入库。
+两次数据库回归运行同一套测试，不能相加宣称为 168 个不同用例。测试日志保存在 backend/target/ai-full-test.log 和 ai-mysql-test.log；前端日志与截图在 frontend/test-results 和 ai-e2e-check.log。target/node_modules 等生成目录不入库。
 
 ## 验证内容
 
@@ -37,7 +37,7 @@
 
 ## 已知边界
 
-测试不证明真实 OCR/ASR、云模型、公开部署或多用户鉴权能力；这些未纳入本次最小完整范围。实际 JDK 21 运行未单独验收，已验证 release 21 编译及 JDK 25 运行。Element Plus 完整组件包产生约 940 KB 的 UI 分块（gzip 约 302 KB），构建有体积提示，不影响本地功能验收。后续优化可以按需引入组件。
+真实 DeepSeek 已单独调用验证，记录见 live-ai-verification.json。自动化 AI 测试使用本地假服务，不计为真实模型调用。测试不证明真实 OCR/ASR、公开部署或多用户鉴权能力；这些未纳入本次最小完整范围。实际 JDK 21 运行未单独验收，已验证 release 21 编译及 JDK 25 运行。Element Plus 完整组件包产生约 940 KB 的 UI 分块（gzip 约 302 KB），构建有体积提示，不影响本地功能验收。后续优化可以按需引入组件。
 
 H2 写盘设置参考：[SET WRITE_DELAY](https://h2database.com/html/commands.html#set_write_delay)。
 

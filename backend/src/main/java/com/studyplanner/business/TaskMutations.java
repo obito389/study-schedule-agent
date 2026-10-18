@@ -14,7 +14,15 @@ public class TaskMutations {
         JsonNode p = command.payload();
         if (command.type().equals("CREATE_TASK")) {
             String id = UUID.nameUUIDFromBytes(("demo:"+command.operationKey()).getBytes(StandardCharsets.UTF_8)).toString();
-            tasks.add(taskInput(id,p,snapshot.now(),List.of()));
+            TaskSnapshot task=taskInput(id,p,snapshot.now(),List.of());
+            if(p.hasNonNull("start") || p.hasNonNull("end")) {
+                Instant start=Instant.parse(text(p,"start")),end=Instant.parse(text(p,"end"));
+                long seconds=Duration.between(start,end).getSeconds();
+                if(seconds!=(long)task.estimatedDurationMinutes()*60)
+                    throw new IllegalArgumentException("指定时间段必须与预计耗时一致");
+                task=copy(task,task.status(),List.of(new TimeBlock(UUID.randomUUID().toString(),id,start,end,false,TimeBlockKind.TASK)));
+            }
+            tasks.add(task);
         } else if (command.type().equals("APPLY_PLAN")) {
             if (plan.isEmpty()) throw new ApiException(422,"EMPTY_PLAN","没有可保存的新时间块");
             for (CandidateBlock b : plan) {

@@ -22,7 +22,13 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: `java ${javaOptions}-jar ../backend/target/study-planner-backend-0.0.1-SNAPSHOT.jar --server.port=8081 "--spring.datasource.url=jdbc:h2:mem:e2e;MODE=MySQL;DB_CLOSE_DELAY=-1"`,
+      command: "node tests/fixtures/ai-provider.mjs",
+      url: "http://127.0.0.1:8084",
+      timeout: 15000,
+      reuseExistingServer: false,
+    },
+    {
+      command: `java ${javaOptions}-jar ../backend/target/study-planner-backend-0.0.1-SNAPSHOT.jar --server.port=8081 "--spring.datasource.url=jdbc:h2:mem:e2e;MODE=MySQL;DB_CLOSE_DELAY=-1" --app.ai.base-url=http://127.0.0.1:8084 --app.ai.api-key=e2e-test --app.ai.model=e2e-model`,
       url: "http://127.0.0.1:8081/api/v1/health",
       timeout: 120000,
       reuseExistingServer: false,

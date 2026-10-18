@@ -9,15 +9,26 @@ import {
   safely,
 } from "./composables/usePlanner";
 import HistoryDrawer from "./components/HistoryDrawer.vue";
+import { api } from "./api/client";
+const aiConfigured = ref(false);
 const route = useRoute(),
   historyOpen = ref(false);
 const links = [
+  { path: "/ai", icon: "✧", name: "AI 学习助手", sub: "DEEPSEEK AI" },
   { path: "/", icon: "▦", name: "学习日历", sub: "CALENDAR" },
   { path: "/tasks", icon: "☑", name: "任务清单", sub: "TASKS" },
   { path: "/import", icon: "↥", name: "导入与校对", sub: "IMPORT" },
   { path: "/profile", icon: "◉", name: "偏好与反馈", sub: "PROFILE" },
 ];
-onMounted(() => safely(refresh));
+onMounted(() => {
+  safely(refresh);
+  api
+    .get("/ai/status")
+    .then((r) => {
+      aiConfigured.value = r.data.configured;
+    })
+    .catch(() => {});
+});
 </script>
 <template>
   <div class="app-shell">
@@ -52,7 +63,9 @@ onMounted(() => safely(refresh));
           {{ links.find((l) => l.path === route.path)?.name }}
         </div>
         <div class="topbar-actions">
-          <span class="mode-tag">离线 Mock 模式</span
+          <span class="mode-tag">{{
+            aiConfigured ? "DeepSeek 已配置" : "AI 未配置 · 规则可用"
+          }}</span
           ><button class="text-button" @click="historyOpen = true">
             执行记录 ↗</button
           ><button

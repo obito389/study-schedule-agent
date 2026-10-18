@@ -39,7 +39,7 @@ class MinimumCompleteApiTest {
     @Autowired MockMvc mvc;
 
     @BeforeEach void reset() {
-        for (String table:List.of("action_execution","plan_preview","calendar_block","study_task","study_course","profile_fact_record","import_job"))
+        for (String table:List.of("ai_draft","action_execution","plan_preview","calendar_block","study_task","study_course","profile_fact_record","import_job"))
             jdbc.update("DELETE FROM "+table);
         jdbc.update("UPDATE user_schedule SET revision=0 WHERE id='demo'");
     }
@@ -149,7 +149,7 @@ class MinimumCompleteApiTest {
         }
     }
     @Test void httpEndpointsReturnUsableSnapshotAndConflict() throws Exception {
-        mvc.perform(get("/api/v1/health")).andExpect(status().isOk()).andExpect(jsonPath("$.mode").value("mock"));
+        mvc.perform(get("/api/v1/health")).andExpect(status().isOk()).andExpect(jsonPath("$.importMode").value("mock"));
         mvc.perform(post("/api/v1/actions").contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsBytes(command("http",0,"CREATE_TASK",task("HTTP任务")))))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("APPLIED"));

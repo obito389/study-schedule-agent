@@ -36,6 +36,8 @@ plans/
 
 ## 当前状态
 
+2026-10-19 已补齐真实 DeepSeek AI 学习助手：自然语言创建任务与指定时段、按窗口安排已有任务、日程查询；AI 建议先预览再确认，仍复用后端硬约束和事务执行器。入口 `/#/ai`，通过 `DEEPSEEK_API_KEY` 配置，密钥不随交付包提供。截图/录音识别仍为 Mock。演示讲解见 [AI 演示说明](docs/delivery/ai-demo.md)。
+
 2026-10-18 已形成最小完整交付首版：Vue 前端、JPA/Flyway 数据持久化、事务执行器、课程/任务/固定时段、导入校对、排程预览与确认、日历、偏好、耗时反馈和安全撤销均已接通。默认本地单用户，导入识别明确使用 Mock。H2 与真实 MySQL 8 上均通过 71 项后端测试，另有 5 项前端单测、2 条浏览器端到端用例及服务重启持久化验收。
 
 ## 启动与验收
@@ -49,7 +51,7 @@ powershell -ExecutionPolicy Bypass -File scripts/start-frontend.ps1
 
 后端 http://127.0.0.1:8080，开发前端 http://127.0.0.1:5173。默认文件数据库无需账号，数据保留在 `backend/data`。单 JAR 交付运行时不需要 Node；用 `scripts/build-delivery.ps1` 打包，访问同一个后端地址即可使用内嵌前端。
 
-完整启动、MySQL 配置、五分钟演示和范围说明见 [交付说明](docs/delivery/README.md)，验收证据见 [测试报告](docs/delivery/test-report.md)。当前没有真实 OCR/ASR、云模型或多用户公网鉴权，后续可接组员实现。
+完整启动、MySQL 配置、五分钟演示和范围说明见 [交付说明](docs/delivery/README.md)，验收证据见 [测试报告](docs/delivery/test-report.md)。当前没有真实 OCR/ASR 或多用户公网鉴权，后续可接组员实现。
 
 ## 文档
 

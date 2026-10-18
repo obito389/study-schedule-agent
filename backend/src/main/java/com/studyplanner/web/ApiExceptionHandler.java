@@ -9,7 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import com.studyplanner.common.ApiException;
-@RestControllerAdvice(assignableTypes=PlannerController.class) @Order(-10)
+@RestControllerAdvice(assignableTypes={PlannerController.class,AiController.class}) @Order(-10)
 public class ApiExceptionHandler {
     private static final Logger LOG=LoggerFactory.getLogger(ApiExceptionHandler.class);
     @ExceptionHandler(ApiException.class)

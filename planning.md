@@ -21,6 +21,13 @@
 
 ## 当前进度
 
+### 2026-10-19 真实 AI 安排
+
+- 用户授权复用已有 DeepSeek 配置，新增自然语言助手入口；支持创建单任务（可带明确时段）、限定窗口安排未排入任务、查询日程。
+- 复用 ModelAdapter / AgentToolRegistry / HardConstraintValidator / ActionExecutor；模型调用在事务外，建议保存 ai_draft 并由用户确认后执行。
+- 已真实调用 deepseek-flash 验证时间理解、创建、安排和查询；确认幂等、撤销均通过。未持久写入或输出任何密钥。
+- 新增 13 项后端测试、1 条浏览器 AI 链路；范围和视频讲稿见 docs/delivery/ai-demo.md，实际调用证据见 live-ai-verification.json。
+
 ### 2026-10-19 组员 PR 集成
 
 - 根据用户授权重新检查远端；无新增功能 PR，原 #1/#3 计划已合并 main，#4 导入代码补齐已验证修复后合并 codex/xiong-backend。

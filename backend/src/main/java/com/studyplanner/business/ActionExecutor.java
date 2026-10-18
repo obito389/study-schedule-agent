@@ -69,7 +69,7 @@ public class ActionExecutor {
         } catch (ApiException e) {
             ExecutionReceipt receipt=failure(executionId,command,revision.revision,e.httpStatus,e.code,e.getMessage());
             save(command,request,receipt,before,before); return receipt;
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | java.time.DateTimeException e) {
             ExecutionReceipt receipt=failure(executionId,command,revision.revision,400,"INVALID_ACTION",e.getMessage());
             save(command,request,receipt,before,before); return receipt;
         }

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyplanner.business.*;
 import com.studyplanner.contract.*;
 import com.studyplanner.profile.ProfileService;
+import com.studyplanner.agent.LiveAiService;
 @RestController
 @RequestMapping("/api/v1")
 public class PlannerController {
@@ -19,12 +20,13 @@ public class PlannerController {
     private final CalendarService calendar;
     private final ProfileService profile;
     private final ObjectMapper mapper;
+    private final LiveAiService ai;
     public PlannerController(ScheduleStore store,ActionExecutor executor,PlanningService planning,
-            CalendarService calendar,ProfileService profile,ObjectMapper mapper) {
-        this.store=store;this.executor=executor;this.planning=planning;this.calendar=calendar;this.profile=profile;this.mapper=mapper;
+            CalendarService calendar,ProfileService profile,ObjectMapper mapper,LiveAiService ai) {
+        this.store=store;this.executor=executor;this.planning=planning;this.calendar=calendar;this.profile=profile;this.mapper=mapper;this.ai=ai;
     }
     @GetMapping("/health") public Map<String,Object> health() {
-        return Map.of("status","UP","mode","mock","user","demo","timezone","Asia/Shanghai");
+        return Map.of("status","UP","mode",ai.status().mode(),"aiProvider","DeepSeek","importMode","mock","user","demo","timezone","Asia/Shanghai");
     }
     @GetMapping("/schedule") public ScheduleSnapshot schedule() { return store.snapshot(); }
     @PostMapping("/actions") public ResponseEntity<ExecutionReceipt> execute(@RequestBody ActionCommand command) {

@@ -184,6 +184,10 @@ async function remove() {
       ><PlanPreview />
     </div>
   </div>
+  <router-link to="/ai" class="ai-entry"
+    >✧ 用一句话安排学习：例如“明晚8点复习数据库，预计1小时”
+    <span>打开 AI 学习助手 ↗</span></router-link
+  >
   <div class="stats-grid">
     <div class="stat-card">
       <span>待完成任务</span>

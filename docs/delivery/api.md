@@ -5,6 +5,9 @@
 | 方法 | 路径 | 作用 |
 |---|---|---|
 | GET | /api/v1/health | 运行模式与健康状态 |
+| GET | /api/v1/ai/status | DeepSeek 是否配置、provider/model/mode，不返回密钥 |
+| POST | /api/v1/ai/previews | `{instruction}` → 真实 AI 解释、澄清或待确认草案 |
+| POST | /api/v1/ai/drafts/{draftId}/confirm | 确认服务器保存的 AI 命令，返回 ExecutionReceipt |
 | GET | /api/v1/schedule | ScheduleSnapshot，含 planningRevision |
 | POST | /api/v1/planning/previews | 生成服务端保存的候选，返回 previewId/baseRevision/candidate |
 | POST | /api/v1/actions | 确认写动作，返回 ExecutionReceipt |
@@ -48,6 +51,10 @@
 | UNDO | executionId |
 
 此封装是应用层命令，未扩展或改写冻结的 ActionType。原 Agent 继续输出 ActionSpec，应用层确认 API 接收明确的用户操作。
+
+AI 预览状态为 NEEDS_CONFIRMATION / NEEDS_CLARIFICATION / ANSWER / NO_CAPACITY。只有待确认结果有可确认的持久化草案；客户端不能替换草案中的命令、scope、operationKey 或 baseRevision。重复确认同一 draftId 重放同一回执，不再次调用模型。指定时段的 CREATE_TASK 允许 payload 带 start/end，必须与预计耗时一致且通过时间槽/冲突校验。
+
+外部模型调用发生在数据库事务之外；调用期间若 revision 改变，返回 409。AI_TIMEOUT 为 504，AI_AUTH_FAILED / AI_BALANCE_REQUIRED / AI_RATE_LIMITED 为 503，AI_INVALID_RESPONSE 为 502。错误不包含上游正文或密钥，失败不会伪装成 Mock 成功。
 
 相同 operationKey + 语义相同请求返回原回执，不再次递增 revision；改变内容返回 409 DUPLICATE_OPERATION_MISMATCH。失败/冲突回执也会保存；修改内容或刷新后重新操作须用新键。网络结果未知时重试同键和原请求。
 

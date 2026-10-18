@@ -9,9 +9,11 @@ import CalendarPage from "./pages/CalendarPage.vue";
 import TasksPage from "./pages/TasksPage.vue";
 import ImportPage from "./pages/ImportPage.vue";
 import ProfilePage from "./pages/ProfilePage.vue";
+import AiPage from "./pages/AiPage.vue";
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
+    { path: "/ai", component: AiPage },
     { path: "/", component: CalendarPage },
     { path: "/tasks", component: TasksPage },
     { path: "/import", component: ImportPage },

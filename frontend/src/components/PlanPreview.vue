@@ -38,7 +38,7 @@ const title = (id: string) =>
     @click="generate"
     data-testid="generate-plan"
   >
-    ✧ {{ busy ? "生成中…" : "生成排程预览" }}
+    {{ busy ? "生成中…" : "规则排程预览" }}
   </button>
   <el-dialog v-model="open" title="排程预览 · 等待确认" width="720px">
     <template v-if="preview"
