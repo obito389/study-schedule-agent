@@ -108,8 +108,8 @@ onMounted(() => {
 <template>
   <div class="page-heading">
     <div>
-      <div class="eyebrow">CAPTURE, REVIEW, THEN PLAN</div>
-      <h1>把信息变成行动<span class="heading-dot">.</span></h1>
+      <div class="eyebrow">收集信息，认真核对</div>
+      <h1>导入与校对</h1>
       <p>上传截图或录音，核对后再创建正式任务。</p>
     </div>
     <span class="mode-tag">Mock 识别 · 需手动校对</span>

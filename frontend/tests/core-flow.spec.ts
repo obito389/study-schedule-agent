@@ -41,7 +41,8 @@ test("task creation, planning confirmation, calendar, undo and completion", asyn
   await expect(
     page.getByText("浏览器验收 · 数据库报告", { exact: true }),
   ).toBeVisible();
-  await page.getByRole("link", { name: "偏好与反馈" }).click();
+  await page.getByRole("button", { name: "设置", exact: true }).click();
+  await page.getByRole("menuitem", { name: /偏好与反馈/ }).click();
   await expect(page.getByText("任务完成反馈", { exact: true })).toBeVisible();
   const snapshot = await (
     await request.get("http://127.0.0.1:8081/api/v1/schedule")
@@ -66,7 +67,8 @@ test("mock import requires correction and saves a real task; mobile fits screen"
     .fill("浏览器验收 · 导入校对任务");
   await page.getByRole("button", { name: "已核对，确认创建任务" }).click();
   await expect(page.getByRole("heading", { name: "任务已保存" })).toBeVisible();
-  await page.getByRole("link", { name: "偏好与反馈" }).click();
+  await page.getByRole("button", { name: "设置", exact: true }).click();
+  await page.getByRole("menuitem", { name: /偏好与反馈/ }).click();
   await page.getByTestId("daily-limit").fill("180");
   await page.getByTestId("save-preference").click();
   await expect(

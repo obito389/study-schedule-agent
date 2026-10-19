@@ -4,6 +4,7 @@ import ElementPlus from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import "element-plus/dist/index.css";
 import "./style.css";
+import "./workspace.css";
 import App from "./App.vue";
 import CalendarPage from "./pages/CalendarPage.vue";
 import TasksPage from "./pages/TasksPage.vue";

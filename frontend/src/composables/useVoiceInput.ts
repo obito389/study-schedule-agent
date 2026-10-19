@@ -24,7 +24,7 @@ type SpeechWindow = Window & {
 export function useVoiceInput(text: Ref<string>, disabled: Ref<boolean>) {
   const listening = ref(false);
   const processing = ref(false);
-  const message = ref("长按输入区说话，松开结束；也可直接打字。");
+  const message = ref("按住语音按钮说话，松开结束；文字可随时修改。");
   let timer: ReturnType<typeof setTimeout> | undefined;
   let recognition: Recognition | undefined;
   let held = false;
@@ -76,7 +76,7 @@ export function useVoiceInput(text: Ref<string>, disabled: Ref<boolean>) {
           "浏览器语音服务不可用，请换用 Chrome / Edge，或继续打字。",
         "audio-capture": "未找到可用麦克风，请检查设备连接。",
         network: "语音识别服务连接失败，请检查网络，或继续打字。",
-        "no-speech": "没有听到声音，请按住输入区后再说话。",
+        "no-speech": "没有听到声音，请按住语音按钮后再说话。",
         aborted: "语音输入已取消，可以继续打字。",
       };
       message.value = errors[event.error] ?? "语音识别失败，请重试或继续打字。";

@@ -23,6 +23,13 @@ test("AI interpretation uses backend adapter, persists draft, confirms once, cla
     await request.get("http://127.0.0.1:8081/api/v1/schedule")
   ).json();
   expect(preview.tasks.length).toBe(before.tasks.length);
+  await page.getByTestId("ai-instruction").fill("修改为明晚九点");
+  await expect(page.getByTestId("ai-stale")).toBeVisible();
+  await expect(page.getByTestId("ai-confirm")).toBeDisabled();
+  await page
+    .getByTestId("ai-instruction")
+    .fill("创建明晚8点复习数据库一个小时的任务");
+  await expect(page.getByTestId("ai-confirm")).toBeEnabled();
   await page.screenshot({
     path: "test-results/ai-test-provider-preview.png",
     fullPage: true,

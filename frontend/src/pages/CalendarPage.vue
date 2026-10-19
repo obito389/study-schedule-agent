@@ -175,8 +175,8 @@ async function remove() {
 <template>
   <div class="page-heading">
     <div>
-      <div class="eyebrow">A LITTLE STRUCTURE, A LOT MORE FOCUS</div>
-      <h1>让学习，有条不紊<span class="heading-dot">.</span></h1>
+      <div class="eyebrow">专注有时，休息也有时</div>
+      <h1>学习日历</h1>
       <p>留出专注的时间，也给生活保留空白。</p>
     </div>
     <div class="button-group">
@@ -185,8 +185,8 @@ async function remove() {
     </div>
   </div>
   <router-link to="/ai" class="ai-entry"
-    >✧ 用一句话安排学习：例如“明晚8点复习数据库，预计1小时”
-    <span>打开 AI 学习助手 ↗</span></router-link
+    ><strong>让想法，落在时间里。</strong>
+    <span>用 AI 安排学习 →</span></router-link
   >
   <div class="stats-grid">
     <div class="stat-card">

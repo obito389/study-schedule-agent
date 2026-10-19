@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { useVoiceInput } from "../composables/useVoiceInput";
 import { api, errorMessage } from "../api/client";
 import { snapshot, refresh } from "../composables/usePlanner";
@@ -23,7 +23,18 @@ const instruction = ref(""),
   error = ref(""),
   result = ref<AiPreview | null>(null),
   receipt = ref<Receipt | null>(null);
-const voice = useVoiceInput(instruction, busy);
+const submittedInstruction = ref("");
+const resultPanel = ref<HTMLElement | null>(null);
+const inputLocked = computed(() => busy.value || saving.value);
+const stale = computed(() =>
+  Boolean(
+    result.value &&
+    !receipt.value &&
+    (instruction.value.trim() !== submittedInstruction.value ||
+      result.value.baseRevision !== snapshot.value?.planningRevision),
+  ),
+);
+const voice = useVoiceInput(instruction, inputLocked);
 const { listening, processing, message: voiceMessage } = voice;
 const summary = computed(() => {
   const preview = result.value;
@@ -63,6 +74,15 @@ const examples = [
   "帮我看看接下来有哪些任务和安排。",
 ];
 async function generate() {
+  if (
+    inputLocked.value ||
+    listening.value ||
+    processing.value ||
+    !instruction.value.trim() ||
+    !configuration.value?.configured
+  )
+    return;
+  submittedInstruction.value = instruction.value.trim();
   busy.value = true;
   error.value = "";
   result.value = null;
@@ -71,7 +91,7 @@ async function generate() {
     result.value = (
       await api.post<AiPreview>(
         "/ai/previews",
-        { instruction: instruction.value },
+        { instruction: submittedInstruction.value },
         { timeout: 65000 },
       )
     ).data;
@@ -79,10 +99,20 @@ async function generate() {
     error.value = errorMessage(e);
   } finally {
     busy.value = false;
+    await nextTick();
+    if (window.matchMedia("(max-width: 1000px)").matches) {
+      resultPanel.value?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+        block: "start",
+      });
+    }
   }
 }
 async function confirm() {
-  if (!result.value) return;
+  if (!result.value || stale.value || inputLocked.value || receipt.value)
+    return;
   saving.value = true;
   error.value = "";
   try {
@@ -117,30 +147,35 @@ onMounted(async () => {
 <template>
   <div class="page-heading">
     <div>
-      <div class="eyebrow">YOUR WORDS, A CLEARER PLAN</div>
-      <h1>用一句话，安排学习<span class="heading-dot">.</span></h1>
-      <p>DeepSeek 理解你的要求，后端校验冲突，你决定是否保存。</p>
+      <div class="eyebrow">你的学习，开始有序</div>
+      <h1>想学什么，一起安排。</h1>
+      <p>说出想法，核对建议，把时间留给真正的专注。</p>
     </div>
   </div>
+  <ol class="workflow-steps" aria-label="安排步骤">
+    <li :class="{ current: !result && !busy }"><span>01</span> 描述想法</li>
+    <li :class="{ current: busy || (result && !receipt) }">
+      <span>02</span> 核对建议
+    </li>
+    <li :class="{ current: receipt }"><span>03</span> 确认保存</li>
+  </ol>
   <div class="ai-layout">
-    <section class="panel padded">
+    <section class="panel padded ai-composer">
       <div class="panel-heading">
-        <h2>告诉 AI 你想做什么</h2>
-        <span class="badge blue">单次理解 · 人工确认</span>
+        <h2>这次想完成什么？</h2>
+        <span class="badge blue">你来决定</span>
       </div>
       <form class="form-stack" @submit.prevent="generate">
         <label
           >学习要求<textarea
             v-model="instruction"
-            rows="6"
+            rows="5"
             maxlength="1500"
             required
             placeholder="例如：明天晚上8点复习数据库，预计1小时，帮我创建并安排这个任务。"
-            :disabled="busy"
+            :disabled="inputLocked"
             :class="{ 'voice-listening': listening }"
             aria-describedby="voice-help"
-            @pointerdown="voice.press"
-            @pointermove="voice.move"
             data-testid="ai-instruction"
           ></textarea>
         </label>
@@ -149,7 +184,7 @@ onMounted(async () => {
             type="button"
             class="voice-button"
             :class="{ recording: listening }"
-            :disabled="busy"
+            :disabled="inputLocked"
             @pointerdown="voice.press"
             @pointermove="voice.move"
             @keydown="voice.keydown"
@@ -164,22 +199,26 @@ onMounted(async () => {
         <small class="muted"
           >{{ instruction.length }} / 1500 · 日期按北京时间理解</small
         >
-        <div class="ai-examples">
-          <small class="muted">试试这样说</small
-          ><button
-            v-for="example in examples"
-            :key="example"
-            type="button"
-            :disabled="busy"
-            @click="instruction = example"
-          >
-            {{ example }} ↗
-          </button>
-        </div>
+        <details class="example-disclosure">
+          <summary>
+            还没想好？试试这些例子 <span aria-hidden="true">＋</span>
+          </summary>
+          <div class="ai-examples">
+            <button
+              v-for="example in examples"
+              :key="example"
+              type="button"
+              :disabled="inputLocked || listening || processing"
+              @click="instruction = example"
+            >
+              {{ example }} ↗
+            </button>
+          </div>
+        </details>
         <button
           class="primary"
           :disabled="
-            busy ||
+            inputLocked ||
             listening ||
             processing ||
             !instruction.trim() ||
@@ -187,24 +226,34 @@ onMounted(async () => {
           "
           data-testid="ai-generate"
         >
-          {{ busy ? "AI 正在理解与生成建议…" : "✧ 让 AI 生成建议" }}
+          {{
+            busy
+              ? "正在梳理你的安排…"
+              : result
+                ? "重新生成建议 →"
+                : "生成学习建议 →"
+          }}
         </button>
         <p class="form-hint">
-          当前支持创建单个任务、按一个时间窗口安排已有任务尚未排入的部分、查询日程。创建任务请说明耗时和截止时间，或明确开始时刻与时长。生成时会向
-          DeepSeek 发送本次要求和当前任务、课程、时段。
+          可创建单个任务、安排已有任务或查询日程。请说清时间和耗时；生成时会将本次要求及当前日程发送给
+          DeepSeek。
         </p>
       </form>
       <div
         v-if="configuration && !configuration.configured"
         class="notice warning"
       >
-        后端未检测到 DEEPSEEK_API_KEY。可继续使用任务页的规则排程；这里不会用
-        Mock 冒充真实 AI。
+        AI 暂未配置，你仍可在任务清单中手动创建任务或使用规则排程。
       </div>
     </section>
-    <section class="panel padded ai-result" aria-live="polite">
+    <section
+      ref="resultPanel"
+      class="panel padded ai-result"
+      aria-live="polite"
+      :aria-busy="busy"
+    >
       <div class="panel-heading">
-        <h2>AI 理解与执行预览</h2>
+        <h2>{{ receipt ? "安排已保存" : "建议预览" }}</h2>
         <span v-if="result" class="badge green"
           >{{ result.provider }} ·
           {{ (result.elapsedMillis / 1000).toFixed(1) }} 秒</span
@@ -220,15 +269,20 @@ onMounted(async () => {
       </div>
       <div v-if="busy" class="empty-state compact">
         <span class="empty-icon">✧</span>
-        <h3>正在调用真实模型</h3>
-        <p>AI 正在提取任务、日期和时间限制。<br />此时还没有写入任务或日历。</p>
+        <h3>正在为你梳理安排</h3>
+        <p>理解任务、检查时间，再给你一份建议。<br />完成后由你核对和确认。</p>
       </div>
       <div v-else-if="!result && !error" class="empty-state">
         <span class="empty-icon">✧</span>
-        <h3>把模糊想法，变成清晰安排</h3>
-        <p>先生成、再检查、最后确认。<br />模型建议仍需通过后端硬约束校验。</p>
+        <h3>下一步，会在这里变清晰</h3>
+        <p>
+          写下学习想法，生成一份可核对的建议。<br />只有你确认后，才会保存到日程。
+        </p>
       </div>
       <template v-if="result">
+        <div v-if="stale" class="notice warning" data-testid="ai-stale">
+          要求或日程已有变化，这份建议已过期。请重新生成后再确认。
+        </div>
         <div class="ai-reasons">
           <small class="eyebrow">AI 理解摘要</small>
           <p v-for="(reason, i) in summary" :key="i">
@@ -240,7 +294,7 @@ onMounted(async () => {
             result.status === "NO_CAPACITY" ? "当前无法安排" : "需要补充信息"
           }}</strong>
           <div v-for="(q, i) in result.clarifications" :key="i">{{ q }}</div>
-          <small>请在左侧补充完整要求后重新生成。</small>
+          <small>请补充完整要求后重新生成。</small>
         </div>
         <template
           v-if="
@@ -285,20 +339,16 @@ onMounted(async () => {
         </div>
         <div v-if="receipt" class="notice">
           <strong data-testid="ai-saved">已确认保存</strong>
-          <div>
-            执行版本 {{ receipt.planningRevision }} ·
-            可到日历查看，或在执行记录撤销。
-          </div>
+          <div>可到日历查看，或在右上角执行记录中撤销。</div>
           <router-link to="/" class="subtle-link">前往学习日历 ↗</router-link>
         </div>
         <template v-else-if="result.status === 'NEEDS_CONFIRMATION'"
           ><div class="notice">
-            以上是 AI
-            候选建议，尚未保存。已通过当前版本的硬约束预检，确认时还会重新校验。
+            建议尚未保存。请核对任务与时间，确认后才会写入日程。
           </div>
           <button
             class="primary"
-            :disabled="saving"
+            :disabled="inputLocked || stale"
             @click="confirm"
             data-testid="ai-confirm"
           >

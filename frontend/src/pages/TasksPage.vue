@@ -3,10 +3,12 @@ import { computed, ref } from "vue";
 import { ElMessageBox } from "element-plus";
 import { snapshot, runCommand, safely } from "../composables/usePlanner";
 import { formatTime } from "../lib/time";
+import { visibleTasks } from "../lib/tasks";
 import TaskEditor from "../components/TaskEditor.vue";
 import PlanPreview from "../components/PlanPreview.vue";
 import type { TaskSnapshot } from "../types/contracts";
 const filter = ref("ACTIVE"),
+  sort = ref("deadline"),
   query = ref(""),
   editor = ref(false),
   selected = ref<TaskSnapshot | null>(null),
@@ -17,17 +19,19 @@ const statuses: Record<string, string> = {
   DONE: "已完成",
   CANCELLED: "已取消",
 };
-const tasks = computed(
-  () =>
-    snapshot.value?.tasks.filter(
-      (t) =>
-        (filter.value === "ALL" ||
-          (filter.value === "ACTIVE"
-            ? !["DONE", "CANCELLED"].includes(t.status)
-            : t.status === filter.value)) &&
-        t.title.includes(query.value),
-    ) ?? [],
+const tasks = computed(() =>
+  visibleTasks(
+    snapshot.value?.tasks ?? [],
+    filter.value,
+    query.value,
+    sort.value,
+  ),
 );
+const hasTasks = computed(() => Boolean(snapshot.value?.tasks.length));
+function clearFilters() {
+  query.value = "";
+  filter.value = "ALL";
+}
 function edit(task: TaskSnapshot | null) {
   selected.value = task;
   editor.value = true;
@@ -73,7 +77,7 @@ async function complete(t: TaskSnapshot) {
 <template>
   <div class="page-heading">
     <div>
-      <div class="eyebrow">MAKE ROOM FOR WHAT MATTERS</div>
+      <div class="eyebrow">一步一步，完成目标</div>
       <h1>任务清单<span class="heading-dot">.</span></h1>
       <p>把学习目标变成清晰、可安排的一小步。</p>
     </div>
@@ -87,17 +91,18 @@ async function complete(t: TaskSnapshot) {
       </button>
     </div>
   </div>
-  <section class="panel">
+  <section class="panel tasks-panel">
     <div class="panel-toolbar">
       <div class="segmented">
         <button
           v-for="f in [
-            { id: 'ACTIVE', label: '进行中的任务' },
+            { id: 'ACTIVE', label: '待完成' },
             { id: 'DONE', label: '已完成' },
             { id: 'ALL', label: '全部' },
           ]"
           :key="f.id"
           :class="{ selected: filter === f.id }"
+          :aria-pressed="filter === f.id"
           @click="filter = f.id"
         >
           {{ f.label }}
@@ -110,11 +115,29 @@ async function complete(t: TaskSnapshot) {
         aria-label="搜索任务"
       />
     </div>
+    <div class="task-results-bar">
+      <span role="status"
+        >{{ tasks.length }} 项任务<span v-if="query.trim()">
+          · 搜索“{{ query.trim() }}”</span
+        ></span
+      >
+      <select v-model="sort" aria-label="任务排序">
+        <option value="deadline">截止时间优先</option>
+        <option value="priority">优先级优先</option>
+      </select>
+    </div>
     <div v-if="!tasks.length" class="empty-state">
       <span class="empty-icon">☑</span>
-      <h3>给今天一个小目标</h3>
-      <p>新建一个任务，再生成排程预览。</p>
-      <button class="primary" @click="edit(null)">新建第一个任务</button>
+      <template v-if="hasTasks || query.trim() || filter !== 'ACTIVE'">
+        <h3>这里暂时没有匹配的任务</h3>
+        <p>换个关键词，或查看全部任务。</p>
+        <button class="secondary" @click="clearFilters">清除筛选</button>
+      </template>
+      <template v-else>
+        <h3>从一个小目标开始</h3>
+        <p>创建任务后，就可以为它安排专注的时间。</p>
+        <button class="primary" @click="edit(null)">新建第一个任务</button>
+      </template>
     </div>
     <div v-else class="table-scroll">
       <table>
@@ -139,11 +162,18 @@ async function complete(t: TaskSnapshot) {
                 · 优先级 {{ t.priority }}</small
               >
             </td>
-            <td>{{ formatTime(t.deadline) }}</td>
-            <td>{{ t.estimatedDurationMinutes }} 分钟</td>
-            <td>
+            <td data-label="截止时间">{{ formatTime(t.deadline) }}</td>
+            <td data-label="预计耗时">{{ t.estimatedDurationMinutes }} 分钟</td>
+            <td data-label="状态">
               <span
-                :class="['badge', t.status === 'DONE' ? 'green' : 'blue']"
+                :class="[
+                  'badge',
+                  t.status === 'DONE'
+                    ? 'green'
+                    : t.status === 'CANCELLED'
+                      ? 'neutral'
+                      : 'blue',
+                ]"
                 >{{
                   t.status === "TODO" && t.scheduledBlocks.length
                     ? "已安排"

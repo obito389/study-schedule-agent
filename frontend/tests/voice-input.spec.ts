@@ -30,7 +30,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page.getByTestId("ai-instruction")).toBeVisible();
 });
 
-test("short click edits normally; hold captures Chinese, appends results, releases outside and cleans up", async ({
+test("textarea remains editable; voice button captures Chinese, releases outside and cleans up", async ({
   page,
 }) => {
   const input = page.getByTestId("ai-instruction");
@@ -38,6 +38,11 @@ test("short click edits normally; hold captures Chinese, appends results, releas
   await input.click();
   expect(await page.evaluate(() => (window as any).speechTest.starts)).toBe(0);
   await input.hover();
+  await page.mouse.down();
+  await page.waitForTimeout(650);
+  await page.mouse.up();
+  expect(await page.evaluate(() => (window as any).speechTest.starts)).toBe(0);
+  await page.getByRole("button", { name: /按住说话/ }).hover();
   await page.mouse.down();
   await expect(page.getByRole("status")).toContainText("正在听");
   await page.evaluate(() =>
@@ -57,7 +62,7 @@ test("short click edits normally; hold captures Chinese, appends results, releas
   await page.mouse.up();
   await expect(input).toHaveValue("原有要求 明天晚上复习数据库一小时");
   expect(await page.evaluate(() => (window as any).speechTest.stops)).toBe(1);
-  await input.hover();
+  await page.getByRole("button", { name: /按住说话/ }).hover();
   await page.mouse.down();
   await expect(page.getByRole("status")).toContainText("正在听");
   await page

@@ -14,7 +14,7 @@ export default defineConfig({
   workers: 1,
   timeout: 45000,
   use: {
-    baseURL: "http://127.0.0.1:5174",
+    baseURL: "http://127.0.0.1:5176",
     headless: true,
     viewport: { width: 1440, height: 1040 },
     trace: "retain-on-failure",
@@ -34,8 +34,8 @@ export default defineConfig({
       reuseExistingServer: false,
     },
     {
-      command: "npm run dev -- --port 5174",
-      url: "http://127.0.0.1:5174",
+      command: "npm run dev -- --port 5176",
+      url: "http://127.0.0.1:5176",
       env: { PLANNER_API_URL: "http://127.0.0.1:8081" },
       timeout: 60000,
       reuseExistingServer: false,
