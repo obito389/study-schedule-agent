@@ -10,6 +10,8 @@ public class ExecutionEntity {
     @Column(nullable=false,columnDefinition="LONGTEXT") public String receiptJson;
     @Column(nullable=false,columnDefinition="LONGTEXT") public String beforeJson;
     @Column(nullable=false,columnDefinition="LONGTEXT") public String afterJson;
+    @Column(columnDefinition="LONGTEXT") public String beforeStateJson;
+    @Column(columnDefinition="LONGTEXT") public String afterStateJson;
     public boolean undone;
     @Column(nullable=false) public Instant createdAt;
 }

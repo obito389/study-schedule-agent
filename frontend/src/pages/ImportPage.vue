@@ -16,6 +16,7 @@ const job = ref<ImportJob | null>(null),
   file = ref<File | null>(null),
   sourceType = ref("SCREENSHOT"),
   busy = ref(false);
+const importMode = ref("mock");
 const requestKey = ref(sessionStorage.getItem("lastImportKey") ?? "");
 const form = reactive({
   title: "",
@@ -102,6 +103,12 @@ async function confirm() {
   busy.value = false;
 }
 onMounted(() => {
+  api
+    .get<{ importMode: string }>("/health")
+    .then(({ data }) => {
+      importMode.value = data.importMode;
+    })
+    .catch(() => {});
   if (requestKey.value) recover();
 });
 </script>
@@ -112,11 +119,18 @@ onMounted(() => {
       <h1>导入与校对</h1>
       <p>上传截图或录音，核对后再创建正式任务。</p>
     </div>
-    <span class="mode-tag">Mock 识别 · 需手动校对</span>
+    <span class="mode-tag">{{
+      importMode === "text-live-files-manual"
+        ? "文本 AI 识别 · 文件人工校对"
+        : "离线提案 · 人工校对"
+    }}</span>
   </div>
   <div class="notice warning">
-    当前为离线 Mock
-    演示：不会读取图片文字或转写录音。上传仅生成待校对提案，请手动填写任务信息；确认后会真实保存到本地数据库。
+    {{
+      importMode === "text-live-files-manual"
+        ? "UTF-8 文本文件可由 DeepSeek 提取任务，单次最多 1300 字；图片和录音目前需手动填写。所有提案都要校对确认后才保存。"
+        : "当前没有配置识别服务，上传生成待校对提案，请手动填写任务信息；确认后会真实保存。图片和录音不会自动识别。"
+    }}
   </div>
   <div class="import-layout">
     <section class="panel padded">

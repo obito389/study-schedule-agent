@@ -17,11 +17,12 @@ public class ActionExecutor {
     private final HardConstraintValidator validator;
     private final JsonCodec json;
     private final Clock clock;
+    private final CalendarMutations calendarMutations;
     private static final TypeReference<List<TaskSnapshot>> TASKS = new TypeReference<>() {};
     public ActionExecutor(ScheduleStore store, ExecutionRepository executions, PreviewRepository previews,
-            TaskMutations mutations, HardConstraintValidator validator, JsonCodec json, Clock clock) {
+            TaskMutations mutations, HardConstraintValidator validator, JsonCodec json, Clock clock, CalendarMutations calendarMutations) {
         this.store=store;this.executions=executions;this.previews=previews;this.mutations=mutations;
-        this.validator=validator;this.json=json;this.clock=clock;
+        this.validator=validator;this.json=json;this.clock=clock;this.calendarMutations=calendarMutations;
     }
     @Transactional
     public ExecutionReceipt execute(ActionCommand command) {
@@ -36,6 +37,8 @@ public class ActionExecutor {
         }
         ScheduleSnapshot snapshot=store.snapshot();
         List<TaskSnapshot> before=snapshot.tasks(), after;
+        CalendarMutations.Change calendarChange=null;
+        String beforeState=json.write(snapshot);
         ExecutionEntity original=null;
         String executionId=UUID.randomUUID().toString();
         try {
@@ -53,27 +56,22 @@ public class ActionExecutor {
                 if (!json.read(original.afterJson,TASKS).equals(before))
                     throw new ApiException(409,"UNDO_CONFLICT","任务已发生后续变化，不能安全撤销");
                 after=json.read(original.beforeJson,TASKS);
+            } else if (calendarMutations.supports(command.type())) {
+                calendarChange=calendarMutations.prepare(command,snapshot);
+                after=before;
             } else {
-                List<CandidateBlock> blocks=List.of();
-                if (command.type().equals("APPLY_PLAN")) {
-                    PreviewEntity preview=previews.findById(TaskMutations.text(command.payload(),"previewId"))
-                            .filter(p -> p.userId.equals(ScheduleStore.USER)).orElseThrow(
-                                    () -> new ApiException(404,"TARGET_NOT_FOUND","预览不存在"));
-                    if (preview.baseRevision!=revision.revision)
-                        throw new ApiException(409,"REVISION_CONFLICT","预览已过期，请重新生成");
-                    blocks=json.read(preview.candidateJson,ScheduleCandidate.class).blocks();
-                }
-                after=mutations.apply(command,snapshot,blocks);
+                after=mutateTasks(command,snapshot);
             }
-            validate(snapshot,after);
+            validate(calendarChange==null?snapshot:calendarChange.candidate(),after);
         } catch (ApiException e) {
             ExecutionReceipt receipt=failure(executionId,command,revision.revision,e.httpStatus,e.code,e.getMessage());
-            save(command,request,receipt,before,before); return receipt;
+            save(command,request,receipt,before,before,beforeState,beforeState); return receipt;
         } catch (IllegalArgumentException | java.time.DateTimeException e) {
             ExecutionReceipt receipt=failure(executionId,command,revision.revision,400,"INVALID_ACTION",e.getMessage());
-            save(command,request,receipt,before,before); return receipt;
+            save(command,request,receipt,before,before,beforeState,beforeState); return receipt;
         }
-        store.replaceTasks(after);
+        if(calendarChange!=null)calendarChange.persist().run();
+        else store.replaceTasks(after);
         if (command.type().equals("COMPLETE_TASK")) {
             String taskId=TaskMutations.text(command.payload(),"taskId");
             TaskSnapshot task=before.stream().filter(t -> t.id().equals(taskId)).findFirst().orElseThrow();
@@ -82,11 +80,52 @@ public class ActionExecutor {
         }
         if (original!=null) { original.undone=true; executions.save(original); }
         revision.revision++;
-        boolean undoable=!command.type().equals("COMPLETE_TASK") && !command.type().equals("UNDO");
+        boolean undoable=calendarChange==null && !command.type().equals("COMPLETE_TASK") && !command.type().equals("UNDO");
         ExecutionReceipt receipt=new ExecutionReceipt(executionId,command.operationKey(),command.type(),"APPLIED",
                 revision.revision,200,"已保存",List.of(),undoable);
-        save(command,request,receipt,before,after);
+        save(command,request,receipt,before,after,beforeState,json.write(store.snapshot()));
         return receipt;
+    }
+    public record Preview(long baseRevision,boolean valid,List<ContractError> violations,
+                          List<TaskSnapshot> beforeTasks,List<TaskSnapshot> afterTasks) {}
+    @Transactional(readOnly=true)
+    public Preview preview(ActionCommand command) {
+        ScheduleSnapshot snapshot=store.snapshot();
+        try {
+            if(!"schedule:write:self".equals(command.authorizationScope()))throw new ApiException(403,"AUTHORIZATION_DENIED","没有当前日程的写入权限");
+            if(command.baseRevision()!=snapshot.planningRevision())throw new ApiException(409,"REVISION_CONFLICT","日程已更新，请重新预览");
+            List<TaskSnapshot> after=mutateTasks(command,snapshot);
+            validate(snapshot,after);
+            return new Preview(snapshot.planningRevision(),true,List.of(),snapshot.tasks(),after);
+        } catch(ApiException e) {
+            return new Preview(snapshot.planningRevision(),false,List.of(new ContractError(e.code,e.getMessage(),List.of())),List.of(),List.of());
+        } catch(IllegalArgumentException | java.time.DateTimeException e) {
+            return new Preview(snapshot.planningRevision(),false,List.of(new ContractError("INVALID_ACTION",e.getMessage(),List.of())),List.of(),List.of());
+        }
+    }
+    private List<TaskSnapshot> mutateTasks(ActionCommand command,ScheduleSnapshot snapshot) {
+        if(command.type().equals("BATCH_TASKS")) {
+            var actions=command.payload().path("actions");
+            if(!actions.isArray() || actions.isEmpty() || actions.size()>50)throw new IllegalArgumentException("批次必须包含 1 至 50 个动作");
+            ScheduleSnapshot candidate=snapshot;
+            for(int i=0;i<actions.size();i++) {
+                var item=actions.get(i);String type=TaskMutations.text(item,"type");
+                if(!Set.of("CREATE_TASK","UPDATE_TASK","CANCEL_TASK","MOVE_TASK","APPLY_PLAN").contains(type))
+                    throw new IllegalArgumentException("批次仅支持创建、修改、取消、移动任务及保存排程");
+                ActionCommand child=new ActionCommand("batch-"+UUID.nameUUIDFromBytes((command.operationKey()+":"+i).getBytes(java.nio.charset.StandardCharsets.UTF_8)),
+                        command.baseRevision(),type,command.authorizationScope(),item.get("payload"));
+                candidate=ScheduleStore.withTasks(candidate,mutateTasks(child,candidate));
+            }
+            return candidate.tasks();
+        }
+        List<CandidateBlock> blocks=List.of();
+        if(command.type().equals("APPLY_PLAN")) {
+            PreviewEntity preview=previews.findById(TaskMutations.text(command.payload(),"previewId"))
+                    .filter(p -> p.userId.equals(ScheduleStore.USER)).orElseThrow(() -> new ApiException(404,"TARGET_NOT_FOUND","预览不存在"));
+            if(preview.baseRevision!=snapshot.planningRevision())throw new ApiException(409,"REVISION_CONFLICT","预览已过期，请重新生成");
+            blocks=json.read(preview.candidateJson,ScheduleCandidate.class).blocks();
+        }
+        return mutations.apply(command,snapshot,blocks);
     }
     public void validate(ScheduleSnapshot base,List<TaskSnapshot> tasks) {
         ScheduleSnapshot candidate=ScheduleStore.withTasks(base,tasks);
@@ -123,9 +162,9 @@ public class ActionExecutor {
         return new ExecutionReceipt(id,c.operationKey(),c.type(),"FAILED",rev,http,message,
                 List.of(new ContractError(code,message,List.of())),false);
     }
-    private void save(ActionCommand c,String request,ExecutionReceipt receipt,List<TaskSnapshot> before,List<TaskSnapshot> after) {
+    private void save(ActionCommand c,String request,ExecutionReceipt receipt,List<TaskSnapshot> before,List<TaskSnapshot> after,String beforeState,String afterState) {
         ExecutionEntity e=new ExecutionEntity();e.id=receipt.executionId();e.userId=ScheduleStore.USER;
         e.operationKey=c.operationKey();e.requestJson=request;e.receiptJson=json.write(receipt);
-        e.beforeJson=json.write(before);e.afterJson=json.write(after);e.createdAt=clock.instant();executions.save(e);
+        e.beforeJson=json.write(before);e.afterJson=json.write(after);e.beforeStateJson=beforeState;e.afterStateJson=afterState;e.createdAt=clock.instant();executions.save(e);
     }
 }

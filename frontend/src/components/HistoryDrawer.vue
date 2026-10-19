@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import ActionStatusTag from "./team/ActionStatusTag.vue";
 import { ElMessageBox } from "element-plus";
 import { api } from "../api/client";
 import { snapshot, runCommand, safely } from "../composables/usePlanner";
@@ -16,6 +17,12 @@ const names: Record<string, string> = {
   APPLY_PLAN: "保存排程",
   COMPLETE_TASK: "完成任务与耗时反馈",
   UNDO: "撤销操作",
+  BATCH_TASKS: "批量任务操作",
+  CREATE_COURSE: "添加课程",
+  DELETE_COURSE: "删除课程",
+  CREATE_FIXED_BLOCK: "添加固定时段",
+  DELETE_FIXED_BLOCK: "删除固定时段",
+  SET_PREFERENCE: "修改偏好",
 };
 async function load() {
   receipts.value = (await api.get<Receipt[]>("/actions")).data;
@@ -62,9 +69,7 @@ async function undo(r: Receipt) {
     >
       <div>
         <strong>{{ names[r.type] ?? r.type }}</strong
-        ><span :class="['badge', r.status === 'APPLIED' ? 'green' : 'red']">{{
-          r.status === "APPLIED" ? "已执行" : "失败"
-        }}</span>
+        ><ActionStatusTag :status="r.status" />
       </div>
       <p>{{ r.message }}</p>
       <small

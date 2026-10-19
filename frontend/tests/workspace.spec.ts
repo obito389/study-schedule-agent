@@ -1,4 +1,29 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type APIRequestContext } from "@playwright/test";
+
+async function ensureCalendarEvent(request: APIRequestContext) {
+  const snapshot = await (
+    await request.get("http://127.0.0.1:8081/api/v1/schedule")
+  ).json();
+  if (
+    snapshot.tasks.some(
+      (t: { scheduledBlocks: unknown[] }) => t.scheduledBlocks.length,
+    ) ||
+    snapshot.courses.length
+  )
+    return;
+  const day = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10);
+  let start = Date.parse(`${day}T20:00:00+08:00`);
+  if (start <= Date.now()) start += 86400000;
+  const response = await request.post("http://127.0.0.1:8081/api/v1/courses", {
+    data: {
+      name: "日历布局验收",
+      start: new Date(start).toISOString(),
+      end: new Date(start + 1800000).toISOString(),
+      baseRevision: snapshot.planningRevision,
+    },
+  });
+  expect(response.ok()).toBe(true);
+}
 
 test("day, week and month calendars expand fully without internal scrolling", async ({
   page,
@@ -23,9 +48,14 @@ test("day, week and month calendars expand fully without internal scrolling", as
         )
         .toBe(true);
       if (view !== "dayGridMonth") {
-        await expect(
-          page.locator(".fc-timegrid-slot-label-cushion").first(),
-        ).toHaveText("6时");
+        const labels = page.locator(".fc-timegrid-slot-label-cushion");
+        const firstHour = Number(
+          (await labels.first().innerText()).replace("时", ""),
+        );
+        // Existing early-morning events expand the default 06:00 boundary.
+        expect(firstHour).toBeGreaterThanOrEqual(0);
+        expect(firstHour).toBeLessThanOrEqual(6);
+        await expect(labels).toHaveCount(24 - firstHour);
         await expect(
           page.locator(".fc-timegrid-slot-label-cushion").last(),
         ).toHaveText("23时");
@@ -55,7 +85,9 @@ test("hovering the weekly grid does not cover hour separators", async ({
 
 test("calendar has readable event columns and day/week/month navigation on mobile", async ({
   page,
+  request,
 }) => {
+  await ensureCalendarEvent(request);
   await page.setViewportSize({ width: 444, height: 706 });
   await page.goto("/#/");
   await expect(page.locator(".fc-timeGridDay-view")).toBeVisible();
@@ -188,6 +220,7 @@ test("month hides event details and saves date notes across reload without chang
   page,
   request,
 }) => {
+  await ensureCalendarEvent(request);
   await page.setViewportSize({ width: 444, height: 706 });
   const before = await (
     await request.get("http://127.0.0.1:8081/api/v1/schedule")

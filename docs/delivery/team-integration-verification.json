@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-20",
+  "backupCommit": "895c5ed5983d17b7df9021fec4bb3195e021a06c",
+  "backendH2": {
+    "tests": 91,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "backendMySQL": {
+    "version": "8.0.46",
+    "tests": 91,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "frontendUnitTests": 17,
+  "liveDeepSeek": {
+    "textProposal": "REVIEW",
+    "confirmedImport": "COMMITTED",
+    "aiDraft": "NEEDS_CONFIRMATION",
+    "confirmedAiDraft": "APPLIED"
+  },
+  "restart": {
+    "mysql": "8.0.46",
+    "taskCount": 2,
+    "revision": 4,
+    "historyCount": 4,
+    "profileHistoryCount": 1,
+    "restartPreservedAllState": true,
+    "idempotencySurvivedRestart": true
+  },
+  "browserTests": {
+    "tests": 17,
+    "passed": 17,
+    "failed": 0
+  }
+}

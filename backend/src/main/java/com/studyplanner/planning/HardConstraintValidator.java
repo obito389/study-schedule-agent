@@ -70,6 +70,14 @@ public final class HardConstraintValidator {
         return List.copyOf(violations);
     }
 
+    /** Course and fixed-block writes share the same overlap rules as task scheduling. */
+    public List<ConstraintViolation> validateFixedBlock(ScheduleSnapshot snapshot, TimeBlock candidate) {
+        return existingBlocks(snapshot).stream()
+                .filter(existing -> overlaps(candidate.start(), candidate.end(), existing.start(), existing.end()))
+                .map(existing -> overlapViolation(candidate.ownerId(), existing))
+                .sorted(VIOLATION_ORDER).toList();
+    }
+
     private static List<TimeBlock> existingBlocks(ScheduleSnapshot snapshot) {
         Map<String, TimeBlock> unique = new LinkedHashMap<>();
         snapshot.courses().forEach(course -> course.meetingBlocks()

@@ -31,3 +31,5 @@ Thumbs.db
 !.env.example
 application-local.yml
 application-local.yaml
+
+.runtime/
