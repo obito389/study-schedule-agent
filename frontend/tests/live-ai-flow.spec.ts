@@ -15,7 +15,9 @@ test("AI interpretation uses backend adapter, persists draft, confirms once, cla
     page.getByRole("heading", { name: "AI浏览器验收任务" }),
   ).toBeVisible();
   await expect(
-    page.getByText("测试提供方解析了自然语言中的时段和耗时"),
+    page.getByText(
+      "创建「AI浏览器验收任务」，预计 60 分钟。已安排具体时段，请核对后确认。",
+    ),
   ).toBeVisible();
   const preview = await (
     await request.get("http://127.0.0.1:8081/api/v1/schedule")
@@ -25,6 +27,29 @@ test("AI interpretation uses backend adapter, persists draft, confirms once, cla
     path: "test-results/ai-test-provider-preview.png",
     fullPage: true,
   });
+  await page.setViewportSize({ width: 444, height: 706 });
+  await expect(page.locator(".page-heading .mode-tag")).toHaveCount(0);
+  await expect(page.locator("nav .primary-nav")).toHaveCount(3);
+  expect(
+    await page
+      .locator(".ai-deadline")
+      .evaluate((el) => Number.parseFloat(getComputedStyle(el).fontSize)),
+  ).toBeGreaterThanOrEqual(20);
+  expect(
+    await page
+      .locator(".ai-block-time")
+      .evaluate((el) => Number.parseInt(getComputedStyle(el).fontWeight)),
+  ).toBeGreaterThanOrEqual(700);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: "test-results/ai-mobile-updated.png",
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 1440, height: 1040 });
   await page.getByTestId("ai-confirm").click();
   await expect(page.getByTestId("ai-saved")).toBeVisible();
   const after = await (

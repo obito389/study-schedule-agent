@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { useVoiceInput } from "../composables/useVoiceInput";
 import { api, errorMessage } from "../api/client";
 import { snapshot, refresh } from "../composables/usePlanner";
 import { formatTime } from "../lib/time";
@@ -22,6 +23,34 @@ const instruction = ref(""),
   error = ref(""),
   result = ref<AiPreview | null>(null),
   receipt = ref<Receipt | null>(null);
+const voice = useVoiceInput(instruction, busy);
+const { listening, processing, message: voiceMessage } = voice;
+const summary = computed(() => {
+  const preview = result.value;
+  if (!preview) return [];
+  if (preview.status === "NEEDS_CLARIFICATION") {
+    return ["还需补充或确认关键信息，完善要求后即可重新生成。"];
+  }
+  if (preview.status === "NO_CAPACITY") {
+    return ["当前窗口无法容纳完整安排，请调整时段或任务后重试。"];
+  }
+  if (
+    preview.action?.type === "CREATE_TASK" &&
+    preview.status === "NEEDS_CONFIRMATION"
+  ) {
+    const changes = preview.action.changes;
+    return [
+      `创建「${changes.title}」，预计 ${changes.durationMinutes} 分钟。${preview.candidate?.blocks.length ? "已安排具体时段，请核对后确认。" : "本次仅创建任务，暂不安排时段。"}`,
+    ];
+  }
+  if (preview.candidate && preview.status === "NEEDS_CONFIRMATION") {
+    return [
+      `已生成 ${preview.candidate.blocks.length} 个安排时段${preview.candidate.gaps.length ? `，${preview.candidate.gaps.length} 个任务未能完整排入` : ""}，请核对后确认。`,
+    ];
+  }
+  // Query answers and clarification context retain their meaning; never truncate dates or conditions.
+  return preview.explanations;
+});
 const configuration = ref<{
   configured: boolean;
   provider: string;
@@ -92,11 +121,6 @@ onMounted(async () => {
       <h1>用一句话，安排学习<span class="heading-dot">.</span></h1>
       <p>DeepSeek 理解你的要求，后端校验冲突，你决定是否保存。</p>
     </div>
-    <span class="mode-tag">{{
-      configuration?.configured
-        ? "真实 AI · " + configuration.model
-        : "等待配置 DeepSeek"
-    }}</span>
   </div>
   <div class="ai-layout">
     <section class="panel padded">
@@ -113,9 +137,30 @@ onMounted(async () => {
             required
             placeholder="例如：明天晚上8点复习数据库，预计1小时，帮我创建并安排这个任务。"
             :disabled="busy"
+            :class="{ 'voice-listening': listening }"
+            aria-describedby="voice-help"
+            @pointerdown="voice.press"
+            @pointermove="voice.move"
             data-testid="ai-instruction"
           ></textarea>
         </label>
+        <div class="voice-controls">
+          <button
+            type="button"
+            class="voice-button"
+            :class="{ recording: listening }"
+            :disabled="busy"
+            @pointerdown="voice.press"
+            @pointermove="voice.move"
+            @keydown="voice.keydown"
+            @keyup="voice.keyup"
+            @blur="voice.release"
+            :aria-pressed="listening"
+          >
+            {{ listening ? "● 正在听…" : "🎙 按住说话" }}
+          </button>
+          <small id="voice-help" role="status">{{ voiceMessage }}</small>
+        </div>
         <small class="muted"
           >{{ instruction.length }} / 1500 · 日期按北京时间理解</small
         >
@@ -133,7 +178,13 @@ onMounted(async () => {
         </div>
         <button
           class="primary"
-          :disabled="busy || !instruction.trim() || !configuration?.configured"
+          :disabled="
+            busy ||
+            listening ||
+            processing ||
+            !instruction.trim() ||
+            !configuration?.configured
+          "
           data-testid="ai-generate"
         >
           {{ busy ? "AI 正在理解与生成建议…" : "✧ 让 AI 生成建议" }}
@@ -179,8 +230,8 @@ onMounted(async () => {
       </div>
       <template v-if="result">
         <div class="ai-reasons">
-          <small class="eyebrow">AI 的理解与依据</small>
-          <p v-for="(reason, i) in result.explanations" :key="i">
+          <small class="eyebrow">AI 理解摘要</small>
+          <p v-for="(reason, i) in summary" :key="i">
             {{ reason }}
           </p>
         </div>
@@ -201,7 +252,10 @@ onMounted(async () => {
             <small class="muted">待创建任务</small>
             <h3>{{ result.action.changes.title }}</h3>
             <div>
-              截止：{{ displayDeadline(result.action.changes.deadline) }}
+              <span>截止：</span
+              ><time class="ai-deadline">{{
+                displayDeadline(result.action.changes.deadline)
+              }}</time>
             </div>
             <div>
               预计：{{ result.action.changes.durationMinutes }} 分钟 · 优先级
@@ -224,7 +278,7 @@ onMounted(async () => {
           >
             <span class="number-dot">{{ i + 1 }}</span
             ><strong>{{ taskTitle(block.taskId) }}</strong
-            ><span
+            ><span class="ai-block-time"
               >{{ formatTime(block.start) }} — {{ formatTime(block.end) }}</span
             >
           </div>
