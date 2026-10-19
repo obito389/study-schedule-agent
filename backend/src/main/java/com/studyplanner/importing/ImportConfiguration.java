@@ -1,6 +1,10 @@
 package com.studyplanner.importing;
 
 import java.time.Clock;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import com.studyplanner.agent.ModelAdapter;
+import com.studyplanner.business.ScheduleStore;
 import java.time.ZoneId;
 
 import org.springframework.context.annotation.Bean;
@@ -15,18 +19,9 @@ public class ImportConfiguration {
     }
 
     @Bean
-    public ImportModelPort importModelPort() {
-        return new MockImportModelAdapter();
-    }
-
-    @Bean
-    public ImportJobRepository importJobRepository() {
-        return new InMemoryImportJobRepository();
-    }
-
-    @Bean
-    public ImportCommitPort importCommitPort() {
-        return new InMemoryImportCommitPort();
+    public ImportModelPort importModelPort(@Qualifier("liveModelAdapter") ModelAdapter model,ScheduleStore store,
+            @Value("${app.ai.api-key:${DEEPSEEK_API_KEY:}}") String key) {
+        return new TextImportModelAdapter(model,store,key!=null && !key.isBlank());
     }
 
     @Bean

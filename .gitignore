@@ -3,6 +3,14 @@
 
 # Java and Maven
 backend/target/
+backend/data/
+frontend/test-results/
+frontend/playwright-report/
+frontend/*-check.log
+frontend/*-install.log
+frontend/npm-install.log
+frontend/audit-runtime.json
+/delivery/
 *.class
 .mvn/timing.properties
 
@@ -23,3 +31,5 @@ Thumbs.db
 !.env.example
 application-local.yml
 application-local.yaml
+
+.runtime/
