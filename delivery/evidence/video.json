@@ -3,5 +3,9 @@
   "method": "实际最终版截图与自动语音讲解",
   "resolution": "1920x1080",
   "framesPerSecond": 15,
-  "file": "学习日程Agent_五分钟自动讲解演示.mp4"
+  "file": "学习日程Agent_五分钟自动讲解演示.mp4",
+  "containerDurationSeconds": 300,
+  "fullDecodeSucceeded": true,
+  "audioRms": 1992.89,
+  "bytes": 4328269
 }
