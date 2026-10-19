@@ -1,0 +1,59 @@
+{
+  "file": "学习日程Agent_真人讲解版.mp4",
+  "sourceSha256": "a56155c369c1d71382f2eb58724fdadc3ac2844fcd837b3df5f4b7d6caddd35f",
+  "sourceSeconds": 362.15,
+  "seconds": 340.013,
+  "method": "用户本人录音配真实界面截图；无合成语音",
+  "audioProcessing": {
+    "trimmedLongPausesSeconds": 6.134,
+    "pitchPreservingTempo": 1.04711,
+    "loudnessTargetLufs": -16,
+    "highPassHz": 70
+  },
+  "resolution": "1920x1080",
+  "framesPerSecond": 15,
+  "fullDecodeSucceeded": true,
+  "bytes": 8907963,
+  "chapters": [
+    {
+      "title": "项目介绍",
+      "startSeconds": 0.0
+    },
+    {
+      "title": "成员分工与架构",
+      "startSeconds": 29.037
+    },
+    {
+      "title": "新建任务",
+      "startSeconds": 57.595
+    },
+    {
+      "title": "规则排程",
+      "startSeconds": 88.376
+    },
+    {
+      "title": "日历与重要事项",
+      "startSeconds": 118.364
+    },
+    {
+      "title": "AI 学习助手",
+      "startSeconds": 150.648
+    },
+    {
+      "title": "导入与人工校对",
+      "startSeconds": 192.687
+    },
+    {
+      "title": "偏好与完成反馈",
+      "startSeconds": 238.039
+    },
+    {
+      "title": "执行记录与撤销",
+      "startSeconds": 272.354
+    },
+    {
+      "title": "测试与当前进度",
+      "startSeconds": 300.72
+    }
+  ]
+}
