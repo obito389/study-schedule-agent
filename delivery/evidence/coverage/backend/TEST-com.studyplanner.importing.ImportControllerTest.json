@@ -1,0 +1,20 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.importing.ImportControllerTest",
+    "time": "1.07",
+    "tests": "1",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "uploadRetryReviewValidationAndIdempotentConfirmationWorkThroughHttp",
+      "classname": "com.studyplanner.importing.ImportControllerTest",
+      "time": "1.063"
+    }
+  ]
+}

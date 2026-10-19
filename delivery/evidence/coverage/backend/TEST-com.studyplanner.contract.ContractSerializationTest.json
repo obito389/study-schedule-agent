@@ -1,0 +1,55 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.contract.ContractSerializationTest",
+    "time": "0.347",
+    "tests": "8",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "rejectsMissingRequiredField",
+      "classname": "com.studyplanner.contract.ContractSerializationTest",
+      "time": "0.092"
+    },
+    {
+      "name": "rejectsUnknownEnum",
+      "classname": "com.studyplanner.contract.ContractSerializationTest",
+      "time": "0.014"
+    },
+    {
+      "name": "rejectsExpiredSchemaVersion",
+      "classname": "com.studyplanner.contract.ContractSerializationTest",
+      "time": "0.014"
+    },
+    {
+      "name": "sampleRoundTripsWithoutLosingFields(String, Class)[1]",
+      "classname": "com.studyplanner.contract.ContractSerializationTest",
+      "time": "0.043"
+    },
+    {
+      "name": "sampleRoundTripsWithoutLosingFields(String, Class)[2]",
+      "classname": "com.studyplanner.contract.ContractSerializationTest",
+      "time": "0.037"
+    },
+    {
+      "name": "sampleRoundTripsWithoutLosingFields(String, Class)[3]",
+      "classname": "com.studyplanner.contract.ContractSerializationTest",
+      "time": "0.019"
+    },
+    {
+      "name": "sampleRoundTripsWithoutLosingFields(String, Class)[4]",
+      "classname": "com.studyplanner.contract.ContractSerializationTest",
+      "time": "0.012"
+    },
+    {
+      "name": "usesIsoInstantAndIanaTimezone",
+      "classname": "com.studyplanner.contract.ContractSerializationTest",
+      "time": "0.017"
+    }
+  ]
+}

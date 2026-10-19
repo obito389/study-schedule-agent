@@ -1,0 +1,140 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.review.ExecutorReviewRegressionTest",
+    "time": "2.163",
+    "tests": "25",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "movingLockedBlockIsRejected",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.179"
+    },
+    {
+      "name": "batchOrderAndAuthorizationArePartOfRequestIdentity",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.101"
+    },
+    {
+      "name": "undoRejectsLaterChangesForEveryEntityType(ActionType)[1]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.093"
+    },
+    {
+      "name": "undoRejectsLaterChangesForEveryEntityType(ActionType)[2]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.01"
+    },
+    {
+      "name": "undoRejectsLaterChangesForEveryEntityType(ActionType)[3]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.012"
+    },
+    {
+      "name": "undoRejectsLaterChangesForEveryEntityType(ActionType)[4]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.005"
+    },
+    {
+      "name": "undoRejectsLaterChangesForEveryEntityType(ActionType)[5]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.006"
+    },
+    {
+      "name": "undoRejectsLaterChangesForEveryEntityType(ActionType)[6]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.005"
+    },
+    {
+      "name": "undoneKeyCannotBeAppliedAgain",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.015"
+    },
+    {
+      "name": "validPreviewDoesNotMutateManagedTask",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.038"
+    },
+    {
+      "name": "unchangedTaskCanBeUndoneAndActionIsReadAfterLock",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.013"
+    },
+    {
+      "name": "failureAuditCannotOverwriteTerminalAction(ActionStatus)[1]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.01"
+    },
+    {
+      "name": "failureAuditCannotOverwriteTerminalAction(ActionStatus)[2]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.007"
+    },
+    {
+      "name": "lateFailureCannotRebindFailedKeyToAnotherPayload",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.009"
+    },
+    {
+      "name": "exactRetryReturnsOriginalResultWithoutWriting",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.013"
+    },
+    {
+      "name": "rejectedForeignTaskPreviewReturnsNoSnapshots",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.001"
+    },
+    {
+      "name": "sameKeyWithChangedPayloadIsRejected",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.006"
+    },
+    {
+      "name": "unlockedBlockCanBeMoved",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.002"
+    },
+    {
+      "name": "undoingOldUpdatePreservesALaterEdit",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.005"
+    },
+    {
+      "name": "stalePreviewDoesNotReadEntitySnapshots",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.001"
+    },
+    {
+      "name": "newFailureBindsItsKeyUnderUserLock",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.009"
+    },
+    {
+      "name": "newApplyPersistsFingerprintAndAdvancesRevisionOnce",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.012"
+    },
+    {
+      "name": "lockedBlockCannotBeUnlockedOrDeleted(ActionType)[1]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.001"
+    },
+    {
+      "name": "lockedBlockCannotBeUnlockedOrDeleted(ActionType)[2]",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.001"
+    },
+    {
+      "name": "changedPayloadWithBoundKeyIsRejected",
+      "classname": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "0.007"
+    }
+  ]
+}

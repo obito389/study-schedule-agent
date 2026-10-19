@@ -1,0 +1,45 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.planning.GreedySchedulerTest",
+    "time": "0.2",
+    "tests": "6",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "schedulesOneHundredTasksDeterministicallyAcrossThirtyRuns",
+      "classname": "com.studyplanner.planning.GreedySchedulerTest",
+      "time": "0.186"
+    },
+    {
+      "name": "skipsCompletedAndCancelledTasks",
+      "classname": "com.studyplanner.planning.GreedySchedulerTest",
+      "time": "0.001"
+    },
+    {
+      "name": "skipsCourseExistingTaskLockedAndUnavailableBlocks",
+      "classname": "com.studyplanner.planning.GreedySchedulerTest",
+      "time": "0.002"
+    },
+    {
+      "name": "returnsGapAndNoPartialBlocksWhenTaskCannotFitBeforeDeadline",
+      "classname": "com.studyplanner.planning.GreedySchedulerTest",
+      "time": "0.004"
+    },
+    {
+      "name": "subtractsExistingDurationAndUsesThirtyMinuteSlots",
+      "classname": "com.studyplanner.planning.GreedySchedulerTest",
+      "time": "0.002"
+    },
+    {
+      "name": "ordersTasksByDeadlineThenPriorityDescendingThenId",
+      "classname": "com.studyplanner.planning.GreedySchedulerTest",
+      "time": "0.002"
+    }
+  ]
+}

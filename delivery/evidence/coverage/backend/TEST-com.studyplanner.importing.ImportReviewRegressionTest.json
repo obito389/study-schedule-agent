@@ -1,0 +1,45 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.importing.ImportReviewRegressionTest",
+    "time": "0.018",
+    "tests": "6",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "commitFailureCanBeRetriedWithoutReuploading",
+      "classname": "com.studyplanner.importing.ImportReviewRegressionTest",
+      "time": "0.003"
+    },
+    {
+      "name": "commitPortRejectsChangedPayloadForTheSameProposalId",
+      "classname": "com.studyplanner.importing.ImportReviewRegressionTest",
+      "time": "0.002"
+    },
+    {
+      "name": "missingTaskFieldsErrorsAndWrongStatusNeverReachCommitPort",
+      "classname": "com.studyplanner.importing.ImportReviewRegressionTest",
+      "time": "0.002"
+    },
+    {
+      "name": "retryAfterLostCommitResponseWritesOnceAndClearsErrors",
+      "classname": "com.studyplanner.importing.ImportReviewRegressionTest",
+      "time": "0.005"
+    },
+    {
+      "name": "modelFailureCanBeRetriedWithTheSameRequestKey",
+      "classname": "com.studyplanner.importing.ImportReviewRegressionTest",
+      "time": "0.001"
+    },
+    {
+      "name": "unresolvedMockProposalCannotBeCommitted",
+      "classname": "com.studyplanner.importing.ImportReviewRegressionTest",
+      "time": "0.001"
+    }
+  ]
+}

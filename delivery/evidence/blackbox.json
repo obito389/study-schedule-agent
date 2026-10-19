@@ -1,0 +1,84 @@
+{
+  "executedAt": "2026-10-20T03:44:47.550681",
+  "server": "http://127.0.0.1:8088/api/v1",
+  "aiProvider": "deterministic local HTTP fixture",
+  "testsRun": 15,
+  "successful": true,
+  "cases": [
+    {
+      "case": "test01_health_and_beijing_snapshot",
+      "status": "PASS",
+      "milliseconds": 54.91
+    },
+    {
+      "case": "test02_missing_identity",
+      "status": "PASS",
+      "milliseconds": 30.42
+    },
+    {
+      "case": "test03_create_idempotent",
+      "status": "PASS",
+      "milliseconds": 132.56
+    },
+    {
+      "case": "test04_bound_key_changed_payload",
+      "status": "PASS",
+      "milliseconds": 93.94
+    },
+    {
+      "case": "test05_stale_revision",
+      "status": "PASS",
+      "milliseconds": 149.76
+    },
+    {
+      "case": "test06_invalid_duration_and_priority",
+      "status": "PASS",
+      "milliseconds": 126.55
+    },
+    {
+      "case": "test07_past_deadline_rollback",
+      "status": "PASS",
+      "milliseconds": 125.3
+    },
+    {
+      "case": "test08_preview_confirm_undo",
+      "status": "PASS",
+      "milliseconds": 363.16
+    },
+    {
+      "case": "test09_completion_and_profile",
+      "status": "PASS",
+      "milliseconds": 292.34
+    },
+    {
+      "case": "test10_other_user_task_rejected",
+      "status": "PASS",
+      "milliseconds": 232.54
+    },
+    {
+      "case": "test11_legacy_writes_blocked",
+      "status": "PASS",
+      "milliseconds": 31.3
+    },
+    {
+      "case": "test12_profile_persists_and_invalidates_revision",
+      "status": "PASS",
+      "milliseconds": 124.49
+    },
+    {
+      "case": "test13_model_clarification_and_failure_not_success",
+      "status": "PASS",
+      "milliseconds": 78.71
+    },
+    {
+      "case": "test14_concurrent_same_revision_one_winner",
+      "status": "PASS",
+      "milliseconds": 98.46
+    },
+    {
+      "case": "test15_course_and_fixed_window",
+      "status": "PASS",
+      "milliseconds": 131.39
+    }
+  ]
+}

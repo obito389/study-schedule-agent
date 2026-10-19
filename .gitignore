@@ -3,6 +3,11 @@
 
 # Java and Maven
 backend/target/
+backend-hjh/target/
+.runtime/
+team-build.log
+frontend/test-results/
+frontend/playwright-report/
 *.class
 .mvn/timing.properties
 
@@ -23,3 +28,11 @@ Thumbs.db
 !.env.example
 application-local.yml
 application-local.yaml
+
+delivery/materials/
+delivery/reports/
+delivery/*.zip
+delivery/*.mp4
+
+
+__pycache__/

@@ -1,0 +1,50 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.agent.AgentServiceTest",
+    "time": "0.632",
+    "tests": "7",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "returnsFailedWhenModelAdapterThrows",
+      "classname": "com.studyplanner.agent.AgentServiceTest",
+      "time": "0.208"
+    },
+    {
+      "name": "createsTaskActionForConfirmationWithoutApplyingIt",
+      "classname": "com.studyplanner.agent.AgentServiceTest",
+      "time": "0.343"
+    },
+    {
+      "name": "createsCancelActionForConfirmation",
+      "classname": "com.studyplanner.agent.AgentServiceTest",
+      "time": "0.011"
+    },
+    {
+      "name": "convertsMissingToolFieldsIntoStructuredClarification",
+      "classname": "com.studyplanner.agent.AgentServiceTest",
+      "time": "0.004"
+    },
+    {
+      "name": "invokesModelAndOneRegisteredToolAtMostOnce",
+      "classname": "com.studyplanner.agent.AgentServiceTest",
+      "time": "0.012"
+    },
+    {
+      "name": "asksForClarificationWithoutSelectingAToolWhenInformationIsMissing",
+      "classname": "com.studyplanner.agent.AgentServiceTest",
+      "time": "0.002"
+    },
+    {
+      "name": "createsMoveActionForConfirmation",
+      "classname": "com.studyplanner.agent.AgentServiceTest",
+      "time": "0.001"
+    }
+  ]
+}

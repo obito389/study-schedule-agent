@@ -1,0 +1,40 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.profile.ProfileServiceTest",
+    "time": "0.016",
+    "tests": "5",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "storesExplicitPreferenceAndDateScopedExceptionWithEvidence",
+      "classname": "com.studyplanner.profile.ProfileServiceTest",
+      "time": "0.005"
+    },
+    {
+      "name": "allowsUserToDenyAndDeleteFactsWithoutErasingHistory",
+      "classname": "com.studyplanner.profile.ProfileServiceTest",
+      "time": "0.001"
+    },
+    {
+      "name": "currentDateViewUsesInjectedClock",
+      "classname": "com.studyplanner.profile.ProfileServiceTest",
+      "time": "0.003"
+    },
+    {
+      "name": "deletingDurationEvidenceRecomputesEstimateAndInvalidatesOldDraftVersion",
+      "classname": "com.studyplanner.profile.ProfileServiceTest",
+      "time": "0.001"
+    },
+    {
+      "name": "modifyingPreferenceSupersedesEarlierValue",
+      "classname": "com.studyplanner.profile.ProfileServiceTest",
+      "time": "0.002"
+    }
+  ]
+}

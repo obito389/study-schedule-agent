@@ -1,0 +1,60 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.planning.HardConstraintValidatorTest",
+    "time": "0.025",
+    "tests": "9",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "reportsLockedBlockSeparatelyFromOrdinaryOverlap",
+      "classname": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.004"
+    },
+    {
+      "name": "acceptsCandidateEndingExactlyAtDeadline",
+      "classname": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.002"
+    },
+    {
+      "name": "permitsTouchingIntervalBoundaries",
+      "classname": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.001"
+    },
+    {
+      "name": "appliesDailyLimitPerLocalDateAcrossMidnight",
+      "classname": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.003"
+    },
+    {
+      "name": "rejectsCandidateEndingAfterDeadline",
+      "classname": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.001"
+    },
+    {
+      "name": "reportsForbiddenPeriodWithHigherSpecificity",
+      "classname": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.002"
+    },
+    {
+      "name": "returnsViolationsInStableCodeThenObjectOrder",
+      "classname": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.003"
+    },
+    {
+      "name": "rejectsCandidateThatExceedsDailyStudyLimit",
+      "classname": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.001"
+    },
+    {
+      "name": "rejectsOverlapWithExistingTaskBlock",
+      "classname": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.001"
+    }
+  ]
+}
