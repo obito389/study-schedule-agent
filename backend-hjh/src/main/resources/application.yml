@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/studyplanner?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none        # 表结构由 Flyway 管理，JPA 不自动建表
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+# Swagger 地址: http://localhost:8080/swagger-ui.html
