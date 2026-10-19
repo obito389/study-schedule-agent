@@ -19,6 +19,6 @@ export function calendarStartTime(
     // An event continuing past midnight occupies the following morning too.
     minutes = Math.min(minutes, to > midnight + day ? 0 : firstMinute);
   }
-  minutes = Math.floor(minutes / 30) * 30;
+  minutes = Math.floor(minutes / 60) * 60;
   return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}:00`;
 }

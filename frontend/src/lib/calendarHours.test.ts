@@ -11,13 +11,13 @@ describe("visible calendar hours", () => {
       ),
     ).toBe("06:00:00");
   });
-  it("expands to the half-hour slot containing the earliest event", () => {
+  it("expands to the hourly row containing the earliest event", () => {
     expect(
       calendarStartTime(
         [{ start: "2026-10-19T04:45", end: "2026-10-19T07:00" }],
         ...range,
       ),
-    ).toBe("04:30:00");
+    ).toBe("04:00:00");
   });
   it("ignores events outside the displayed dates", () => {
     expect(

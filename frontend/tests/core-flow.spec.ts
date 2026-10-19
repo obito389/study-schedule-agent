@@ -20,6 +20,7 @@ test("task creation, planning confirmation, calendar, undo and completion", asyn
   await page.getByRole("link", { name: "学习日历" }).click();
   await expect(page.locator(".fc")).toBeVisible();
   await expect(page.locator(".fc-event")).toHaveCount(2);
+  await page.locator(".fc-event").first().scrollIntoViewIfNeeded();
   await expect(page.locator(".fc-event").first()).toBeInViewport();
   await expect(page.locator(".el-message")).toHaveCount(0);
   await page.screenshot({

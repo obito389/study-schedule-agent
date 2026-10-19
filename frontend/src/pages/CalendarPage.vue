@@ -25,9 +25,28 @@ import type { TaskSnapshot, TimeBlock } from "../types/contracts";
 import PlanPreview from "../components/PlanPreview.vue";
 import TaskEditor from "../components/TaskEditor.vue";
 import { calendarStartTime } from "../lib/calendarHours";
+import { calendarDayKey, scheduledCalendarDays } from "../lib/calendarDays";
+import { useDayNotes } from "../composables/useDayNotes";
+const { notes, error: noteError, save: saveDayNote } = useDayNotes();
+const noteOpen = ref(false),
+  noteDay = ref(""),
+  noteText = ref("");
+const currentView = ref("");
+const weekPart = ref<"weekdays" | "weekend">("weekdays");
 const showAllHours = ref(false);
 const visibleRange = reactive({ start: "", end: "" });
 const events = computed(() => calendarEvents(snapshot.value!));
+const scheduledDays = computed(() =>
+  scheduledCalendarDays(events.value, visibleRange.start, visibleRange.end),
+);
+function openDayNote(date: Date) {
+  noteDay.value = calendarDayKey(date);
+  noteText.value = notes.value[noteDay.value] ?? "";
+  noteOpen.value = true;
+}
+function saveNote() {
+  if (saveDayNote(noteDay.value, noteText.value)) noteOpen.value = false;
+}
 const autoStartTime = computed(() =>
   calendarStartTime(events.value, visibleRange.start, visibleRange.end),
 );
@@ -76,29 +95,36 @@ const options = computed<CalendarOptions>(() => ({
   initialView: window.innerWidth < 760 ? "timeGridDay" : "timeGridWeek",
   initialDate: shanghaiInput(snapshot.value!.now),
   timeZone: "local",
+  firstDay: 1,
+  hiddenDays:
+    currentView.value === "timeGridWeek"
+      ? weekPart.value === "weekdays"
+        ? [0, 6]
+        : [1, 2, 3, 4, 5]
+      : [],
   headerToolbar: {
     left: "prev,next today",
     center: "title",
-    right:
-      window.innerWidth < 760
-        ? "timeGridDay,dayGridMonth"
-        : "timeGridWeek,dayGridMonth",
+    right: "timeGridDay,timeGridWeek,dayGridMonth",
   },
-  slotDuration: "00:30:00",
+  slotDuration: "01:00:00",
+  slotLabelInterval: "01:00:00",
+  snapDuration: "00:30:00",
+  slotLabelContent: ({ time }) => {
+    const hour = Math.floor(time.milliseconds / 3600000);
+    return `${hour}时`;
+  },
   slotMinTime: showAllHours.value ? "00:00:00" : autoStartTime.value,
   slotMaxTime: "24:00:00",
-  datesSet: ({ startStr, endStr }) => {
+  datesSet: ({ startStr, endStr, view }) => {
     visibleRange.start = startStr.slice(0, 10);
     visibleRange.end = endStr.slice(0, 10);
+    currentView.value = view.type;
   },
   allDaySlot: false,
-  height: 660,
-  scrollTime:
-    String(
-      Math.max(0, Number(shanghaiInput(snapshot.value!.now).slice(11, 13)) - 1),
-    ).padStart(2, "0") + ":00:00",
-  nowIndicator: true,
-  events: events.value,
+  height: "auto",
+  nowIndicator: false,
+  events: currentView.value === "dayGridMonth" ? [] : events.value,
   eventClick: clickEvent,
   editable: false,
   displayEventTime: true,
@@ -229,16 +255,25 @@ async function remove() {
       <div class="panel-heading">
         <div>
           <h2>我的日程</h2>
-          <span class="muted">北京时间 · 30 分钟时间槽</span>
+          <span class="muted">北京时间</span>
         </div>
         <button class="text-button" @click="openAdd">＋ 课程 / 固定时段</button>
       </div>
-      <div class="calendar-legend">
+      <div
+        v-if="currentView === 'dayGridMonth'"
+        class="calendar-legend month-legend"
+      >
+        <span
+          ><i class="legend-dot month-planned-dot"></i>有安排或重要事项</span
+        >
+        <span>点击日期填写重要事项</span>
+      </div>
+      <div v-else class="calendar-legend">
         <span><i class="legend-dot blue-dot"></i>学习任务</span
         ><span><i class="legend-dot gold-dot"></i>课程</span
         ><span><i class="legend-dot grey-dot"></i>固定 / 禁止时段</span>
       </div>
-      <div class="calendar-hours">
+      <div v-if="currentView !== 'dayGridMonth'" class="calendar-hours">
         <span
           >{{
             showAllHours ? "00:00–24:00" : autoStartTime.slice(0, 5) + "–24:00"
@@ -254,7 +289,87 @@ async function remove() {
           {{ showAllHours ? "恢复自动时段" : "显示全天" }}
         </button>
       </div>
-      <FullCalendar :options="options" />
+      <div v-if="currentView === 'timeGridWeek'" class="calendar-week-controls">
+        <div class="segmented" role="group" aria-label="周视图范围">
+          <button
+            type="button"
+            :class="{ selected: weekPart === 'weekdays' }"
+            :aria-pressed="weekPart === 'weekdays'"
+            @click="weekPart = 'weekdays'"
+          >
+            工作日
+          </button>
+          <button
+            type="button"
+            :class="{ selected: weekPart === 'weekend' }"
+            :aria-pressed="weekPart === 'weekend'"
+            @click="weekPart = 'weekend'"
+          >
+            周末
+          </button>
+        </div>
+      </div>
+      <FullCalendar :options="options">
+        <template #dayCellContent="{ date, dayNumberText, view }">
+          <button
+            v-if="view.type === 'dayGridMonth'"
+            type="button"
+            class="month-day-button"
+            :class="{
+              'has-day-content':
+                scheduledDays.has(calendarDayKey(date)) ||
+                !!notes[calendarDayKey(date)],
+            }"
+            :data-date="calendarDayKey(date)"
+            :aria-label="
+              calendarDayKey(date) +
+              (scheduledDays.has(calendarDayKey(date)) ? '，有安排' : '') +
+              (notes[calendarDayKey(date)] ? '，已记重要事项' : '') +
+              '，编辑重要事项'
+            "
+            @click.stop="openDayNote(date)"
+          >
+            <span class="month-date-number">{{ dayNumberText }}</span>
+            <span
+              v-if="notes[calendarDayKey(date)]"
+              class="month-note-mark"
+              aria-hidden="true"
+              >✎</span
+            >
+          </button>
+          <span v-else>{{ dayNumberText }}</span>
+        </template>
+        <template #eventContent="{ event, view }">
+          <div
+            class="calendar-event-entry"
+            :title="event.title"
+            :class="{ 'calendar-month-event': view.type === 'dayGridMonth' }"
+          >
+            <div
+              class="calendar-event-time"
+              :aria-label="
+                shanghaiInput(event.extendedProps.block.start).slice(11) +
+                ' 至 ' +
+                shanghaiInput(event.extendedProps.block.end).slice(11)
+              "
+            >
+              <time>{{
+                shanghaiInput(event.extendedProps.block.start).slice(11)
+              }}</time>
+              <span
+                v-if="view.type !== 'dayGridMonth'"
+                class="calendar-event-separator"
+                aria-hidden="true"
+                >—</span
+              >
+              <time v-if="view.type !== 'dayGridMonth'">{{
+                shanghaiInput(event.extendedProps.block.end).slice(11)
+              }}</time>
+            </div>
+            <strong class="calendar-event-title">{{ event.title }}</strong>
+          </div>
+        </template>
+      </FullCalendar>
     </section>
     <aside class="calendar-aside">
       <section class="panel upcoming-panel">
@@ -291,6 +406,38 @@ async function remove() {
       </section>
     </aside>
   </div>
+  <el-dialog
+    v-model="noteOpen"
+    :title="noteDay + ' · 重要事项'"
+    width="480px"
+    :close-on-click-modal="false"
+  >
+    <form class="form-stack" @submit.prevent="saveNote">
+      <label
+        >当天重要事项<textarea
+          v-model="noteText"
+          rows="5"
+          maxlength="1000"
+          placeholder="例如：提交课程报告、准备答辩材料"
+          data-testid="day-note-input"
+        ></textarea>
+      </label>
+      <p class="form-hint">
+        保存在此浏览器，不占用排程时间。清空内容后保存可移除便笺。
+      </p>
+      <div v-if="noteError" class="notice warning" role="alert">
+        {{ noteError }}
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="secondary" @click="noteOpen = false">
+          返回
+        </button>
+        <button class="primary" data-testid="save-day-note">
+          保存重要事项
+        </button>
+      </div>
+    </form>
+  </el-dialog>
   <TaskEditor v-model="editor" />
   <el-dialog v-model="addOpen" title="添加课程或固定时段" width="500px"
     ><form class="form-stack" @submit.prevent="saveBlock">

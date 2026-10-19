@@ -533,7 +533,201 @@ h3 {
   color: #355943;
 }
 .fc .fc-timegrid-slot-label {
-  color: #7c8b79;
+  color: #435e53;
+  vertical-align: middle;
+  width: 48px;
+}
+.fc .fc-timegrid-slot {
+  height: 64px;
+  border-top: 1px solid #c6d6cc;
+}
+.fc .fc-timegrid-slots tr:nth-child(odd) > td {
+  background-color: #f7faf5;
+}
+.fc .fc-timegrid-slots tr:nth-child(even) > td {
+  background-color: #e9f1e8;
+}
+.fc .fc-timegrid-slot-label-cushion {
+  color: #435e53;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 0 8px;
+  font-variant-numeric: tabular-nums;
+}
+.fc .fc-timegrid-col.fc-day-today {
+  background-color: #cadfc314;
+}
+.fc .fc-timegrid-event {
+  padding: 0;
+  border-radius: 2px;
+  box-shadow: none;
+  margin-right: 0;
+  border: 0;
+}
+.fc .fc-timegrid-col-events {
+  margin: 0;
+}
+.fc .fc-timegrid-event-harness-inset .fc-timegrid-event {
+  box-shadow: none;
+}
+.fc .fc-timegrid-cols {
+  z-index: 2;
+}
+.fc .fc-timeGridWeek-view .fc-timegrid-col.fc-day,
+.fc .fc-timeGridWeek-view .fc-col-header-cell {
+  border-left: 1px solid #b8ccbe;
+  border-right: 1px solid #b8ccbe;
+}
+.calendar-event-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  min-width: 0;
+  padding: 6px 10px;
+}
+.calendar-event-time {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  padding-right: 10px;
+  border-right: 1px solid #ffffff75;
+  font-size: 12px;
+  line-height: 1.1;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.calendar-event-time time {
+  font-size: inherit;
+  font-weight: inherit;
+}
+.calendar-event-separator {
+  display: block;
+  text-align: center;
+  line-height: 6px;
+  font-size: 10px;
+  margin: 1px 0;
+}
+.calendar-event-title {
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.fc .fc-timegrid-event-short .calendar-event-entry {
+  padding-block: 2px;
+}
+.fc .fc-timegrid-event-short .calendar-event-time {
+  gap: 0;
+  font-size: 10px;
+}
+.fc .fc-timeGridWeek-view {
+  min-width: 0;
+}
+.calendar-week-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 12px;
+}
+.calendar-week-controls .segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+}
+.calendar-week-controls .segmented button {
+  min-height: 34px;
+  padding: 7px 16px;
+  min-width: 76px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.fc-timeGridWeek-view .calendar-event-entry {
+  gap: 6px;
+  padding-inline: 7px;
+}
+.fc-timeGridWeek-view .calendar-event-time {
+  font-size: 10px;
+  padding-right: 6px;
+}
+.fc-timeGridWeek-view .calendar-event-title {
+  font-size: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (max-width: 760px) {
+  .fc-timeGridWeek-view .calendar-event-entry {
+    padding-inline: 4px;
+    gap: 4px;
+  }
+  .fc .fc-timeGridWeek-view .calendar-event-time {
+    font-size: 9px;
+    padding-right: 4px;
+  }
+  .fc-timeGridWeek-view .calendar-event-title {
+    font-size: 11px;
+  }
+  .fc .fc-timeGridWeek-view .fc-col-header-cell-cushion {
+    font-size: 9px;
+    padding-inline: 2px;
+  }
+}
+.fc .fc-dayGridMonth-view .fc-daygrid-day.fc-day-today {
+  background: transparent;
+}
+.fc .fc-dayGridMonth-view .fc-daygrid-day-frame {
+  min-height: 70px;
+  position: relative;
+}
+.fc .fc-dayGridMonth-view .fc-daygrid-day-number {
+  position: static;
+  width: 100%;
+  padding: 0;
+}
+.fc .fc-dayGridMonth-view .fc-daygrid-day-events {
+  display: none;
+}
+.month-day-button {
+  position: absolute;
+  inset: 2px;
+  width: calc(100% - 4px);
+  padding: 10px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  background: transparent;
+  border-radius: 7px;
+  color: #536a5b;
+  font-size: 12px;
+}
+.month-day-button.has-day-content {
+  background: #dcebd9;
+  color: #235a3d;
+  font-weight: 700;
+}
+.month-day-button:hover {
+  outline: 1px solid #8eae91;
+  outline-offset: -1px;
+}
+.month-day-button:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+}
+.fc .fc-day-today .month-date-number {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.month-note-mark {
+  color: #4b7650;
+  font-size: 16px;
+}
+.month-planned-dot {
+  background: #94b48b;
 }
 .fc .fc-col-header-cell-cushion {
   color: #587154;
@@ -587,7 +781,7 @@ th {
 td {
   color: #466049;
 }
-tbody tr:hover {
+.table-scroll tbody tr:hover {
   background: #f8faf3;
 }
 .row-actions button {
