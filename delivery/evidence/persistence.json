@@ -1,0 +1,57 @@
+{
+  "method": "接口快照与独立 MySQL 查询比对",
+  "snapshot": {
+    "schemaVersion": 1,
+    "now": "2026-10-19T20:00:35.448042400Z",
+    "timezone": "Asia/Shanghai",
+    "courses": [],
+    "tasks": [
+      {
+        "id": "1",
+        "courseId": null,
+        "title": "复习数据库",
+        "deadline": "2026-10-21T13:00:00Z",
+        "estimatedDurationMinutes": 60,
+        "priority": 3,
+        "status": "TODO",
+        "scheduledBlocks": [
+          {
+            "id": "1",
+            "ownerId": "1",
+            "start": "2026-10-21T12:00:00Z",
+            "end": "2026-10-21T13:00:00Z",
+            "locked": false,
+            "kind": "TASK"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "courseId": null,
+        "title": "完成软件工程实验报告",
+        "deadline": "2026-10-22T19:23:57.033Z",
+        "estimatedDurationMinutes": 90,
+        "priority": 2,
+        "status": "TODO",
+        "scheduledBlocks": []
+      }
+    ],
+    "lockedBlocks": [],
+    "activeFacts": [
+      {
+        "schemaVersion": 1,
+        "key": "planning.dailyLimitMinutes",
+        "value": 240,
+        "scope": "GLOBAL",
+        "strength": 1.0,
+        "source": "MANUAL",
+        "state": "ACTIVE",
+        "evidenceIds": [],
+        "version": 1
+      }
+    ],
+    "planningRevision": 2
+  },
+  "databaseQuery": "id\tuser_id\ttitle\tstatus\n1\t1\t复习数据库\tTODO\n2\t1\t完成软件工程实验报告\tTODO\nid\tuser_id\tstatus\n1\t1\tPLANNED\n",
+  "restartRecovery": "未完成：自动审批拒绝服务重启；不计为通过项"
+}

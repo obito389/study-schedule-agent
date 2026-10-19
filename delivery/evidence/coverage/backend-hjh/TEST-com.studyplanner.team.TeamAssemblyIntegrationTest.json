@@ -1,0 +1,110 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+    "time": "10.475",
+    "tests": "19",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "rulePreviewConfirmUndoUsesMemberTablesAndIsIdempotent",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.779"
+    },
+    {
+      "name": "finalManualCommandRetriesAreBoundAndUndoPersists",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.226"
+    },
+    {
+      "name": "finalCourseAndFixedAdaptersUseRealMemberRows",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.17"
+    },
+    {
+      "name": "finalAiSchedulingHonorsExplicitWindow",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.182"
+    },
+    {
+      "name": "finalAiPreviewConfirmCannotBeTampered",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.155"
+    },
+    {
+      "name": "finalCommandsRejectUnsupportedTypeAndWrongScope",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.048"
+    },
+    {
+      "name": "stalePreviewCannotBeConfirmed",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.176"
+    },
+    {
+      "name": "pastDeadlineRejectsWithoutPartialWrites",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.036"
+    },
+    {
+      "name": "laterChildPreventsUnsafeUndo",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.192"
+    },
+    {
+      "name": "finalCompleteFeedbackCannotBeUndoneThroughReceipts",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.126"
+    },
+    {
+      "name": "finalRulePreviewAndReceiptUndoShareMemberExecutor",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.189"
+    },
+    {
+      "name": "completionPersistsFeedbackFactsEventsAndStatsExactlyOnce",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.331"
+    },
+    {
+      "name": "profileRevisionAndFactsArePersistedAndStaleUpdatesFail",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.059"
+    },
+    {
+      "name": "deniedDurationEvidenceRefreshesStatistics",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.14"
+    },
+    {
+      "name": "importReviewIsDurableAndConfirmationCreatesLinkedTaskOnce",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.081"
+    },
+    {
+      "name": "anotherUserCannotConfirmDraftAndLegacyWritesAreBlocked",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.081"
+    },
+    {
+      "name": "aiCreationWithBlockHasAuditsAndCanUndoInReverseOrder",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.094"
+    },
+    {
+      "name": "memberCoursesAndWindowsParticipateInSharedConstraints",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.107"
+    },
+    {
+      "name": "conflictingFixedWindowRollsBackAndProfileLimitCannotInvalidateSchedule",
+      "classname": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "0.166"
+    }
+  ]
+}

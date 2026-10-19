@@ -1,0 +1,213 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\ZhuanZ（无密码）\\.codex\\worktrees\\final-delivery\\日程安排agent\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--reporter=json"
+    ],
+    "configFile": "C:\\Users\\ZhuanZ（无密码）\\.codex\\worktrees\\final-delivery\\日程安排agent\\frontend\\playwright.config.ts",
+    "rootDir": "C:/Users/ZhuanZ（无密码）/.codex/worktrees/final-delivery/日程安排agent/frontend/tests/final",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/ZhuanZ（无密码）/.codex/worktrees/final-delivery/日程安排agent/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/ZhuanZ（无密码）/.codex/worktrees/final-delivery/日程安排agent/frontend/tests/final",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\ZhuanZ（无密码）\\.codex\\worktrees\\final-delivery\\日程安排agent\\frontend\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\ZhuanZ（无密码）\\.codex\\worktrees\\final-delivery\\日程安排agent\\frontend\\tests\\final",
+        "snapshotDir": "C:\\Users\\ZhuanZ（无密码）\\.codex\\worktrees\\final-delivery\\日程安排agent\\frontend\\tests\\final",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 30000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5182",
+          "extraHTTPHeaders": {
+            "X-User-Id": "1"
+          },
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "delivery.spec.ts",
+      "file": "delivery.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "最终界面任务创建、规则确认、撤销及完成反馈",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5249,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-19T19:44:32.298Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6be646c84a0e17f5bcd7-cced24e65f8f6385264a",
+          "file": "delivery.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "导入校对、偏好持久化和窄屏导航",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1943,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-19T19:44:37.668Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6be646c84a0e17f5bcd7-ce916e6c1960be011f7a",
+          "file": "delivery.spec.ts",
+          "line": 19,
+          "column": 1
+        },
+        {
+          "title": "AI 待确认、固定模型确认及上游失败反馈",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1122,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-19T19:44:39.620Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6be646c84a0e17f5bcd7-622a08a26075cbe8d788",
+          "file": "delivery.spec.ts",
+          "line": 33,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-19T19:44:31.827Z",
+    "duration": 9035.282,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

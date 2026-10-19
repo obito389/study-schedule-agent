@@ -1,0 +1,10 @@
+{
+  "note": "本机专用测试服务的小样本延迟与8并发冒烟，不代表生产容量或长期压力测试",
+  "sequentialRequests": 50,
+  "sequentialP50Ms": 30.31,
+  "sequentialP95Ms": 34.36,
+  "parallelRequests": 80,
+  "workers": 8,
+  "parallelSeconds": 0.157,
+  "allHttp200": true
+}

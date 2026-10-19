@@ -1,0 +1,20 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.StudyPlannerApplicationTest",
+    "time": "1.317",
+    "tests": "1",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "contextLoads",
+      "classname": "com.studyplanner.StudyPlannerApplicationTest",
+      "time": "1.315"
+    }
+  ]
+}

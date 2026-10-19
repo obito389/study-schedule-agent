@@ -1,0 +1,25 @@
+{
+  "suite": {
+    "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+    "version": "3.0.2",
+    "name": "com.studyplanner.importing.ImportSourceTest",
+    "time": "0.008",
+    "tests": "2",
+    "errors": "0",
+    "skipped": "0",
+    "failures": "0",
+    "flakes": "0"
+  },
+  "cases": [
+    {
+      "name": "rejectsMissingRequestKeyAndEmptyContent",
+      "classname": "com.studyplanner.importing.ImportSourceTest",
+      "time": "0.001"
+    },
+    {
+      "name": "copiesContentAtTheBoundary",
+      "classname": "com.studyplanner.importing.ImportSourceTest",
+      "time": "0.005"
+    }
+  ]
+}

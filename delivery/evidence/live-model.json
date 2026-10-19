@@ -1,0 +1,28 @@
+{
+  "provider": "真实 DeepSeek",
+  "status": "NEEDS_CONFIRMATION",
+  "action": {
+    "schemaVersion": 1,
+    "operationKey": "77dec2de-d4a7-4e9a-a544-d74478cda7db",
+    "baseRevision": 0,
+    "type": "CREATE_TASK",
+    "targets": [],
+    "changes": {
+      "title": "复习数据库",
+      "deadline": "2026-10-21T13:00:00Z",
+      "durationMinutes": 60,
+      "priority": 3,
+      "start": "2026-10-21T12:00:00Z",
+      "end": "2026-10-21T13:00:00Z"
+    },
+    "authorizationScope": "schedule:write:self",
+    "reasonFacts": [
+      "用户要求创建“复习数据库”任务，时长60分钟，并安排在明天20点至21点。",
+      "按 Asia/Shanghai 时区，“明天”为2026-10-21，对应 UTC 时间为12:00至13:00。",
+      "将时段结束时间作为最迟完成截止时间。"
+    ],
+    "status": "NEEDS_CONFIRMATION",
+    "errors": []
+  },
+  "elapsedMillis": 3738
+}

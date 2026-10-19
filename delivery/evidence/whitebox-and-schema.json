@@ -1,0 +1,1538 @@
+{
+  "coverage": {
+    "backend": {
+      "INSTRUCTION": {
+        "covered": 3349,
+        "missed": 483
+      },
+      "BRANCH": {
+        "covered": 247,
+        "missed": 127
+      },
+      "LINE": {
+        "covered": 701,
+        "missed": 94
+      },
+      "COMPLEXITY": {
+        "covered": 228,
+        "missed": 128
+      },
+      "METHOD": {
+        "covered": 159,
+        "missed": 8
+      },
+      "CLASS": {
+        "covered": 43,
+        "missed": 1
+      }
+    },
+    "backend-hjh": {
+      "INSTRUCTION": {
+        "covered": 9627,
+        "missed": 8174
+      },
+      "BRANCH": {
+        "covered": 539,
+        "missed": 698
+      },
+      "LINE": {
+        "covered": 1504,
+        "missed": 1543
+      },
+      "COMPLEXITY": {
+        "covered": 744,
+        "missed": 1209
+      },
+      "METHOD": {
+        "covered": 606,
+        "missed": 705
+      },
+      "CLASS": {
+        "covered": 109,
+        "missed": 24
+      }
+    }
+  },
+  "focused": {
+    "com/studyplanner/agent/AgentService": {
+      "INSTRUCTION": {
+        "covered": 66,
+        "missed": 10
+      },
+      "BRANCH": {
+        "covered": 4,
+        "missed": 2
+      },
+      "LINE": {
+        "covered": 18,
+        "missed": 3
+      },
+      "COMPLEXITY": {
+        "covered": 4,
+        "missed": 2
+      },
+      "METHOD": {
+        "covered": 3,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "com/studyplanner/profile/ProfileService": {
+      "INSTRUCTION": {
+        "covered": 358,
+        "missed": 20
+      },
+      "BRANCH": {
+        "covered": 16,
+        "missed": 6
+      },
+      "LINE": {
+        "covered": 72,
+        "missed": 3
+      },
+      "COMPLEXITY": {
+        "covered": 29,
+        "missed": 6
+      },
+      "METHOD": {
+        "covered": 24,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "com/studyplanner/planning/GreedyScheduler": {
+      "INSTRUCTION": {
+        "covered": 406,
+        "missed": 2
+      },
+      "BRANCH": {
+        "covered": 28,
+        "missed": 2
+      },
+      "LINE": {
+        "covered": 98,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 29,
+        "missed": 2
+      },
+      "METHOD": {
+        "covered": 16,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "com/studyplanner/planning/HardConstraintValidator": {
+      "INSTRUCTION": {
+        "covered": 403,
+        "missed": 17
+      },
+      "BRANCH": {
+        "covered": 28,
+        "missed": 4
+      },
+      "LINE": {
+        "covered": 71,
+        "missed": 3
+      },
+      "COMPLEXITY": {
+        "covered": 37,
+        "missed": 4
+      },
+      "METHOD": {
+        "covered": 25,
+        "missed": 0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "com/studyplanner/executor/ActionExecutor": {
+      "INSTRUCTION": {
+        "covered": 1049,
+        "missed": 581
+      },
+      "BRANCH": {
+        "covered": 80,
+        "missed": 63
+      },
+      "LINE": {
+        "covered": 206,
+        "missed": 72
+      },
+      "COMPLEXITY": {
+        "covered": 51,
+        "missed": 67
+      },
+      "METHOD": {
+        "covered": 23,
+        "missed": 16
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "com/studyplanner/team/TeamActionService": {
+      "INSTRUCTION": {
+        "covered": 441,
+        "missed": 278
+      },
+      "BRANCH": {
+        "covered": 32,
+        "missed": 43
+      },
+      "LINE": {
+        "covered": 31,
+        "missed": 8
+      },
+      "COMPLEXITY": {
+        "covered": 8,
+        "missed": 39
+      },
+      "METHOD": {
+        "covered": 4,
+        "missed": 4
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "com/studyplanner/team/TeamSharedValidator": {
+      "INSTRUCTION": {
+        "covered": 140,
+        "missed": 63
+      },
+      "BRANCH": {
+        "covered": 25,
+        "missed": 17
+      },
+      "LINE": {
+        "covered": 12,
+        "missed": 0
+      },
+      "COMPLEXITY": {
+        "covered": 11,
+        "missed": 16
+      },
+      "METHOD": {
+        "covered": 4,
+        "missed": 2
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "com/studyplanner/delivery/DeliveryController": {
+      "INSTRUCTION": {
+        "covered": 289,
+        "missed": 89
+      },
+      "BRANCH": {
+        "covered": 8,
+        "missed": 12
+      },
+      "LINE": {
+        "covered": 15,
+        "missed": 4
+      },
+      "COMPLEXITY": {
+        "covered": 11,
+        "missed": 12
+      },
+      "METHOD": {
+        "covered": 10,
+        "missed": 3
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "com/studyplanner/delivery/DeliveryCommands": {
+      "INSTRUCTION": {
+        "covered": 633,
+        "missed": 152
+      },
+      "BRANCH": {
+        "covered": 63,
+        "missed": 25
+      },
+      "LINE": {
+        "covered": 38,
+        "missed": 4
+      },
+      "COMPLEXITY": {
+        "covered": 35,
+        "missed": 27
+      },
+      "METHOD": {
+        "covered": 12,
+        "missed": 4
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    },
+    "com/studyplanner/undo/UndoExecutor": {
+      "INSTRUCTION": {
+        "covered": 651,
+        "missed": 455
+      },
+      "BRANCH": {
+        "covered": 38,
+        "missed": 32
+      },
+      "LINE": {
+        "covered": 158,
+        "missed": 91
+      },
+      "COMPLEXITY": {
+        "covered": 26,
+        "missed": 41
+      },
+      "METHOD": {
+        "covered": 18,
+        "missed": 10
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0
+      }
+    }
+  },
+  "testSuites": [
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.agent.AgentServiceTest",
+      "time": "0.632",
+      "tests": "7",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.contract.ContractSerializationTest",
+      "time": "0.347",
+      "tests": "8",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.importing.ImportControllerTest",
+      "time": "1.07",
+      "tests": "1",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.importing.ImportReviewRegressionTest",
+      "time": "0.018",
+      "tests": "6",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.importing.ImportServiceTest",
+      "time": "0.009",
+      "tests": "3",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.importing.ImportSourceTest",
+      "time": "0.008",
+      "tests": "2",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.integration.ActionExecutorHandoffSamplesTest",
+      "time": "0.029",
+      "tests": "4",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.integration.ImportSchedulingFlowTest",
+      "time": "0.012",
+      "tests": "1",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.integration.SchedulingActionFlowTest",
+      "time": "0.018",
+      "tests": "1",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.planning.GreedySchedulerTest",
+      "time": "0.2",
+      "tests": "6",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.planning.HardConstraintValidatorTest",
+      "time": "0.025",
+      "tests": "9",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.profile.DurationEstimatorTest",
+      "time": "0.009",
+      "tests": "4",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.profile.ProfileServiceTest",
+      "time": "0.016",
+      "tests": "5",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.StudyPlannerApplicationTest",
+      "time": "1.317",
+      "tests": "1",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.review.ExecutorReviewRegressionTest",
+      "time": "2.163",
+      "tests": "25",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    },
+    {
+      "{http://www.w3.org/2001/XMLSchema-instance}noNamespaceSchemaLocation": "https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd",
+      "version": "3.0.2",
+      "name": "com.studyplanner.team.TeamAssemblyIntegrationTest",
+      "time": "10.475",
+      "tests": "19",
+      "errors": "0",
+      "skipped": "0",
+      "failures": "0",
+      "flakes": "0"
+    }
+  ],
+  "tables": {
+    "agent_action": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "operation_key",
+        "varchar(64)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "type",
+        "varchar(24)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "status",
+        "varchar(20)",
+        "NO",
+        "",
+        "PREVIEW/APPLIED/FAILED/UNDONE"
+      ],
+      [
+        "base_revision",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "applied_revision",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "plan_draft_id",
+        "bigint",
+        "YES",
+        "MUL",
+        "来源排程草案ID，用于批量撤销分组"
+      ],
+      [
+        "base_profile_version",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "authorization_json",
+        "json",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "before_json",
+        "json",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "after_json",
+        "json",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "error_code",
+        "varchar(32)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "created_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "request_hash",
+        "varchar(64)",
+        "YES",
+        "",
+        ""
+      ]
+    ],
+    "app_user": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "username",
+        "varchar(64)",
+        "NO",
+        "UNI",
+        ""
+      ],
+      [
+        "password_hash",
+        "varchar(255)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "timezone",
+        "varchar(64)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "planning_revision",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "profile_version",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "learning_enabled",
+        "tinyint(1)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "created_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ]
+    ],
+    "availability_window": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "kind",
+        "varchar(16)",
+        "NO",
+        "",
+        "WEEKLY_ALLOW / DATE_BLOCK"
+      ],
+      [
+        "weekday",
+        "tinyint",
+        "YES",
+        "",
+        "WEEKLY_ALLOW 用，1=周一"
+      ],
+      [
+        "local_date",
+        "date",
+        "YES",
+        "",
+        "DATE_BLOCK 用，指定日期"
+      ],
+      [
+        "start_time",
+        "time",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "end_time",
+        "time",
+        "NO",
+        "",
+        ""
+      ]
+    ],
+    "course": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "semester_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "title",
+        "varchar(100)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "teacher",
+        "varchar(64)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "location",
+        "varchar(100)",
+        "YES",
+        "",
+        ""
+      ]
+    ],
+    "course_session": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "course_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "weekday",
+        "tinyint",
+        "NO",
+        "",
+        "周一=1"
+      ],
+      [
+        "start_time",
+        "time",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "end_time",
+        "time",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "start_week",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "end_week",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "week_type",
+        "varchar(8)",
+        "NO",
+        "",
+        "ALL/ODD/EVEN"
+      ]
+    ],
+    "execution_log": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "task_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "block_id",
+        "bigint",
+        "YES",
+        "MUL",
+        ""
+      ],
+      [
+        "step_id",
+        "bigint",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "actual_min",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "remaining_after",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "note",
+        "varchar(500)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "feedback_key",
+        "varchar(64)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "created_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ]
+    ],
+    "import_job": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "request_key",
+        "varchar(64)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "modality",
+        "varchar(12)",
+        "NO",
+        "",
+        "TEXT/IMAGE/AUDIO"
+      ],
+      [
+        "state",
+        "varchar(20)",
+        "NO",
+        "",
+        "UPLOADED/PROCESSING/REVIEW/COMMITTED/FAILED/EXPIRED"
+      ],
+      [
+        "source_ref",
+        "varchar(255)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "source_hash",
+        "char(64)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "proposal_json",
+        "json",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "transcript",
+        "text",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "base_revision",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "version",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "lease_until",
+        "datetime(3)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "error_code",
+        "varchar(32)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "created_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "expires_at",
+        "datetime(3)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "contract_json",
+        "longtext",
+        "YES",
+        "",
+        ""
+      ]
+    ],
+    "learning_stat": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "task_type",
+        "varchar(32)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "sample_count",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "ratio",
+        "decimal(5,3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "last_event_id",
+        "bigint",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "updated_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ]
+    ],
+    "plan_draft": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "base_revision",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "base_profile_version",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "status",
+        "varchar(16)",
+        "NO",
+        "",
+        "DRAFT/APPLIED/EXPIRED"
+      ],
+      [
+        "range_start",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "range_end",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "proposal_json",
+        "json",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "request_key",
+        "varchar(64)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "created_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "applied_at",
+        "datetime(3)",
+        "YES",
+        "",
+        ""
+      ]
+    ],
+    "profile_event": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "event_key",
+        "varchar(64)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "type",
+        "varchar(32)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "payload_json",
+        "json",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "created_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ]
+    ],
+    "profile_fact": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "key",
+        "varchar(64)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "value_json",
+        "json",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "source",
+        "varchar(16)",
+        "NO",
+        "",
+        "EXPLICIT/INFERRED"
+      ],
+      [
+        "scope_json",
+        "json",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "state",
+        "varchar(16)",
+        "NO",
+        "",
+        "CANDIDATE/ACTIVE/REJECTED/DELETED"
+      ],
+      [
+        "confidence",
+        "decimal(4,3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "evidence_ids",
+        "json",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "version",
+        "bigint",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "expires_at",
+        "datetime(3)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "updated_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "contract_json",
+        "longtext",
+        "YES",
+        "",
+        ""
+      ]
+    ],
+    "semester": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "name",
+        "varchar(64)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "start_date",
+        "date",
+        "NO",
+        "",
+        "第一教学周周一"
+      ],
+      [
+        "week_count",
+        "int",
+        "NO",
+        "",
+        "1~30 周"
+      ]
+    ],
+    "task": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "course_id",
+        "bigint",
+        "YES",
+        "MUL",
+        ""
+      ],
+      [
+        "import_job_id",
+        "bigint",
+        "YES",
+        "MUL",
+        ""
+      ],
+      [
+        "title",
+        "varchar(150)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "description",
+        "text",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "deadline",
+        "datetime(3)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "remaining_min",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "priority",
+        "tinyint",
+        "NO",
+        "",
+        "1~3，3最高"
+      ],
+      [
+        "status",
+        "varchar(16)",
+        "NO",
+        "",
+        "TODO/DOING/DONE/CANCELLED"
+      ],
+      [
+        "task_type",
+        "varchar(32)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "initial_estimate_min",
+        "int",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "estimate_source",
+        "varchar(16)",
+        "YES",
+        "",
+        ""
+      ],
+      [
+        "updated_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ]
+    ],
+    "task_step": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "task_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "order_no",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "title",
+        "varchar(150)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "remaining_min",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "status",
+        "varchar(16)",
+        "NO",
+        "",
+        ""
+      ]
+    ],
+    "time_block": [
+      [
+        "id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "task_id",
+        "bigint",
+        "NO",
+        "MUL",
+        ""
+      ],
+      [
+        "step_id",
+        "bigint",
+        "YES",
+        "MUL",
+        ""
+      ],
+      [
+        "source_draft_id",
+        "bigint",
+        "YES",
+        "MUL",
+        ""
+      ],
+      [
+        "start_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "end_at",
+        "datetime(3)",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "status",
+        "varchar(16)",
+        "NO",
+        "",
+        "PLANNED/DONE/MISSED/CANCELLED"
+      ],
+      [
+        "locked",
+        "tinyint(1)",
+        "NO",
+        "",
+        ""
+      ]
+    ],
+    "user_preference": [
+      [
+        "user_id",
+        "bigint",
+        "NO",
+        "PRI",
+        ""
+      ],
+      [
+        "daily_limit_min",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "block_min",
+        "int",
+        "NO",
+        "",
+        ""
+      ],
+      [
+        "horizon_days",
+        "int",
+        "NO",
+        "",
+        ""
+      ]
+    ]
+  }
+}

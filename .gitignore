@@ -34,3 +34,5 @@ delivery/reports/
 delivery/*.zip
 delivery/*.mp4
 
+
+__pycache__/
