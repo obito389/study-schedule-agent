@@ -24,6 +24,13 @@ import {
 import type { TaskSnapshot, TimeBlock } from "../types/contracts";
 import PlanPreview from "../components/PlanPreview.vue";
 import TaskEditor from "../components/TaskEditor.vue";
+import { calendarStartTime } from "../lib/calendarHours";
+const showAllHours = ref(false);
+const visibleRange = reactive({ start: "", end: "" });
+const events = computed(() => calendarEvents(snapshot.value!));
+const autoStartTime = computed(() =>
+  calendarStartTime(events.value, visibleRange.start, visibleRange.end),
+);
 const editor = ref(false),
   addOpen = ref(false),
   details = ref(false),
@@ -78,6 +85,12 @@ const options = computed<CalendarOptions>(() => ({
         : "timeGridWeek,dayGridMonth",
   },
   slotDuration: "00:30:00",
+  slotMinTime: showAllHours.value ? "00:00:00" : autoStartTime.value,
+  slotMaxTime: "24:00:00",
+  datesSet: ({ startStr, endStr }) => {
+    visibleRange.start = startStr.slice(0, 10);
+    visibleRange.end = endStr.slice(0, 10);
+  },
   allDaySlot: false,
   height: 660,
   scrollTime:
@@ -85,7 +98,7 @@ const options = computed<CalendarOptions>(() => ({
       Math.max(0, Number(shanghaiInput(snapshot.value!.now).slice(11, 13)) - 1),
     ).padStart(2, "0") + ":00:00",
   nowIndicator: true,
-  events: calendarEvents(snapshot.value!),
+  events: events.value,
   eventClick: clickEvent,
   editable: false,
   displayEventTime: true,
@@ -175,9 +188,7 @@ async function remove() {
 <template>
   <div class="page-heading">
     <div>
-      <div class="eyebrow">专注有时，休息也有时</div>
       <h1>学习日历</h1>
-      <p>留出专注的时间，也给生活保留空白。</p>
     </div>
     <div class="button-group">
       <button class="secondary" @click="editor = true">＋ 新建任务</button
@@ -226,6 +237,22 @@ async function remove() {
         <span><i class="legend-dot blue-dot"></i>学习任务</span
         ><span><i class="legend-dot gold-dot"></i>课程</span
         ><span><i class="legend-dot grey-dot"></i>固定 / 禁止时段</span>
+      </div>
+      <div class="calendar-hours">
+        <span
+          >{{
+            showAllHours ? "00:00–24:00" : autoStartTime.slice(0, 5) + "–24:00"
+          }}<template v-if="!showAllHours && autoStartTime !== '06:00:00'">
+            · 已展开凌晨安排</template
+          ></span
+        >
+        <button
+          class="text-button"
+          :aria-pressed="showAllHours"
+          @click="showAllHours = !showAllHours"
+        >
+          {{ showAllHours ? "恢复自动时段" : "显示全天" }}
+        </button>
       </div>
       <FullCalendar :options="options" />
     </section>

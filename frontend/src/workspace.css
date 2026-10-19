@@ -1,4 +1,14 @@
 /* Learning workspace: shared visual tokens and responsive surfaces. */
+.calendar-hours {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 11px;
+}
 :root {
   --blue: #18766b;
   --ink: #213640;

@@ -149,7 +149,6 @@ onMounted(async () => {
     <div>
       <div class="eyebrow">你的学习，开始有序</div>
       <h1>想学什么，一起安排。</h1>
-      <p>说出想法，核对建议，把时间留给真正的专注。</p>
     </div>
   </div>
   <ol class="workflow-steps" aria-label="安排步骤">
@@ -163,22 +162,20 @@ onMounted(async () => {
     <section class="panel padded ai-composer">
       <div class="panel-heading">
         <h2>这次想完成什么？</h2>
-        <span class="badge blue">你来决定</span>
       </div>
       <form class="form-stack" @submit.prevent="generate">
-        <label
-          >学习要求<textarea
-            v-model="instruction"
-            rows="5"
-            maxlength="1500"
-            required
-            placeholder="例如：明天晚上8点复习数据库，预计1小时，帮我创建并安排这个任务。"
-            :disabled="inputLocked"
-            :class="{ 'voice-listening': listening }"
-            aria-describedby="voice-help"
-            data-testid="ai-instruction"
-          ></textarea>
-        </label>
+        <textarea
+          aria-label="学习要求"
+          v-model="instruction"
+          rows="5"
+          maxlength="1500"
+          required
+          placeholder="例如：明天晚上8点复习数据库，预计1小时，帮我创建并安排这个任务。"
+          :disabled="inputLocked"
+          :class="{ 'voice-listening': listening }"
+          aria-describedby="voice-help"
+          data-testid="ai-instruction"
+        ></textarea>
         <div class="voice-controls">
           <button
             type="button"
@@ -196,9 +193,6 @@ onMounted(async () => {
           </button>
           <small id="voice-help" role="status">{{ voiceMessage }}</small>
         </div>
-        <small class="muted"
-          >{{ instruction.length }} / 1500 · 日期按北京时间理解</small
-        >
         <details class="example-disclosure">
           <summary>
             还没想好？试试这些例子 <span aria-hidden="true">＋</span>
