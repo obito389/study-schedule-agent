@@ -1,0 +1,30 @@
+server:
+  address: 127.0.0.1
+  port: 8085
+spring:
+  datasource:
+    url: ${TEAM_DB_URL:jdbc:mysql://127.0.0.1:3308/team_assembly?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8}
+    username: ${TEAM_DB_USER:root}
+    password: ${TEAM_DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+  flyway:
+    locations: classpath:db/team-migration
+    enabled: true
+    baseline-on-migrate: false
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 11MB
+team:
+  ai:
+    api-key: ${DEEPSEEK_API_KEY:}
+    base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+    model: ${DEEPSEEK_MODEL:deepseek-flash}
