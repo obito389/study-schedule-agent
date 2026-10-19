@@ -1,0 +1,28 @@
+{
+  "model": "deepseek-flash",
+  "instruction": "明天晚上20点到21点复习数据库，创建一个预计60分钟、优先级4的任务。",
+  "provider": "DeepSeek",
+  "interpretedStartUtc": "2026-10-20T12:00:00Z",
+  "afterConfirmBlockCount": 1,
+  "interpretedEndUtc": "2026-10-20T13:00:00Z",
+  "idempotentReplay": true,
+  "modelElapsedMillis": 2225,
+  "beforeConfirmTaskCount": 0,
+  "afterConfirmTaskCount": 1,
+  "verifiedAt": "2026-10-19T02:57:21.9273917+08:00",
+  "undoStatus": "APPLIED",
+  "windowScheduling": {
+    "confirmed": "APPLIED",
+    "blocks": 2,
+    "firstStartUtc": "2026-10-20T10:00:00.0000000+00:00",
+    "status": "NEEDS_CONFIRMATION"
+  },
+  "query": {
+    "explanations": [
+      "当前有 1 个未完成任务：AI时间窗验收任务，截止时间为北京时间 2026-10-22 22:00，预计耗时 60 分钟，优先级 3。",
+      "该任务已安排两段连续时间：北京时间 2026-10-20 18:00-18:30 和 18:30-19:00，合计 60 分钟。",
+      "未发现其他课程、锁定安排或额外待办。"
+    ],
+    "status": "ANSWER"
+  }
+}

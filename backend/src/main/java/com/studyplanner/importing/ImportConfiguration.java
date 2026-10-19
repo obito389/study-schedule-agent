@@ -20,16 +20,6 @@ public class ImportConfiguration {
     }
 
     @Bean
-    public ImportJobRepository importJobRepository() {
-        return new InMemoryImportJobRepository();
-    }
-
-    @Bean
-    public ImportCommitPort importCommitPort() {
-        return new InMemoryImportCommitPort();
-    }
-
-    @Bean
     public ImportService importService(
             ImportModelPort modelPort,
             ImportJobRepository repository,
