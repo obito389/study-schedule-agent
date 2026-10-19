@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   snapshot,
   loading,
@@ -11,6 +11,7 @@ import {
 import HistoryDrawer from "./components/HistoryDrawer.vue";
 import { api } from "./api/client";
 const aiConfigured = ref(false);
+const router = useRouter();
 const route = useRoute(),
   historyOpen = ref(false);
 const links = [
@@ -40,7 +41,7 @@ onMounted(() => {
       <div class="sidebar-label">我的学习空间</div>
       <nav>
         <router-link
-          v-for="link in links"
+          v-for="link in links.slice(0, 3)"
           :key="link.path"
           :to="link.path"
           :class="{
@@ -79,6 +80,26 @@ onMounted(() => {
           >
             ↻
           </button>
+          <el-dropdown trigger="click" @command="router.push($event)">
+            <button
+              class="settings-button"
+              :class="{ active: ['/import', '/profile'].includes(route.path) }"
+              aria-label="设置"
+            >
+              <span aria-hidden="true">⚙</span> 设置
+            </button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  v-for="link in links.slice(3)"
+                  :key="link.path"
+                  :command="link.path"
+                >
+                  {{ link.icon }} {{ link.name }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
       </header>
       <div v-if="connectionError" class="connection-error" role="alert">

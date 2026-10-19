@@ -242,6 +242,26 @@ nav small {
   align-items: center;
   gap: 12px;
 }
+.settings-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  color: var(--blue);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.settings-button:hover,
+.settings-button.active {
+  background: #eef3ff;
+}
+.settings-button:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
 .mode-tag {
   display: inline-flex;
   align-items: center;
@@ -1076,8 +1096,12 @@ td strong {
     width: 100%;
   }
   .topbar {
-    height: 58px;
     padding: 0 17px;
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 58px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   .breadcrumb {
     font-size: 9px;
@@ -1087,6 +1111,7 @@ td strong {
   }
   .topbar-actions {
     gap: 6px;
+    margin-left: auto;
   }
   .mode-tag {
     font-size: 8px;

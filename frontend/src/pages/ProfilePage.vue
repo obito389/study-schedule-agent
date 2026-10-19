@@ -83,18 +83,10 @@ function description(f: ProfileFact) {
 onMounted(() => safely(load));
 </script>
 <template>
-  <div class="page-heading">
-    <div>
-      <div class="eyebrow">A RHYTHM THAT WORKS FOR YOU</div>
-      <h1>找到自己的节奏<span class="heading-dot">.</span></h1>
-      <p>偏好有来源，反馈有依据，每一次调整都由你决定。</p>
-    </div>
-  </div>
   <div class="profile-grid">
     <section class="panel padded">
       <div class="section-icon">◷</div>
       <h2>每日学习上限</h2>
-      <p class="muted">排程与确认写入共用此约束，修改会使旧预览过期。</p>
       <form class="form-stack" @submit.prevent="setPreference">
         <label
           >每天最多安排多少分钟？<input
