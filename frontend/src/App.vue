@@ -1,64 +1,144 @@
-<template>
-  <el-container class="app-container">
-    <el-header class="app-header">
-      <div class="logo">学习日程 Agent · 团队版</div>
-      <el-menu
-        mode="horizontal"
-        :ellipsis="false"
-        :default-active="activeMenu"
-        router
-        class="app-menu"
-      >
-        <el-menu-item index="/">日程日历</el-menu-item>
-        <el-menu-item index="/tasks">任务管理</el-menu-item>
-        <el-menu-item index="/import">导入与校对</el-menu-item>
-        <el-menu-item index="/profile">用户事实</el-menu-item>
-      </el-menu>
-    </el-header>
-    <el-main class="app-main">
-      <router-view />
-    </el-main>
-  </el-container>
-</template>
-
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-
-const route = useRoute()
-const activeMenu = computed(() => route.path)
+import { computed, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import {
+  snapshot,
+  loading,
+  connectionError,
+  refresh,
+  safely,
+} from "./composables/usePlanner";
+import HistoryDrawer from "./components/HistoryDrawer.vue";
+import { api } from "./api/client";
+const aiConfigured = ref(false);
+const remaining = computed(
+  () =>
+    snapshot.value?.tasks.filter(
+      (t) => !["DONE", "CANCELLED"].includes(t.status),
+    ).length ?? 0,
+);
+const router = useRouter();
+const route = useRoute(),
+  historyOpen = ref(false);
+const links = [
+  { path: "/ai", icon: "✧", name: "AI 学习助手", sub: "DEEPSEEK AI" },
+  { path: "/", icon: "▦", name: "学习日历", sub: "CALENDAR" },
+  { path: "/tasks", icon: "☑", name: "任务清单", sub: "TASKS" },
+  { path: "/import", icon: "↥", name: "导入与校对", sub: "IMPORT" },
+  { path: "/profile", icon: "◉", name: "偏好与反馈", sub: "PROFILE" },
+];
+onMounted(() => {
+  safely(refresh);
+  api
+    .get("/ai/status")
+    .then((r) => {
+      aiConfigured.value = r.data.configured;
+    })
+    .catch(() => {});
+});
 </script>
-
-<style scoped>
-.app-container {
-  min-height: 100vh;
-}
-.app-header {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--el-border-color-light);
-  padding: 0 24px;
-}
-.logo {
-  font-size: 18px;
-  font-weight: 600;
-  margin-right: 40px;
-  white-space: nowrap;
-}
-.app-menu {
-  border-bottom: none;
-  flex: 1;
-}
-.app-main {
-  background: var(--el-bg-color-page);
-  padding: 24px;
-}
-@media (max-width: 700px) {
-  .app-header { height: auto; flex-direction: column; align-items: stretch; padding: 12px 16px 0; }
-  .logo { margin-right: 0; padding-bottom: 8px; }
-  .app-menu { width: 100%; --el-menu-horizontal-height: 44px; }
-  .app-menu :deep(.el-menu-item) { flex: 1; padding: 0 6px; font-size: 13px; }
-  .app-main { padding: 12px; }
-}
-:global(.el-dialog) { max-width: calc(100vw - 24px); }
-</style>
+<template>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <router-link to="/" class="brand"
+        ><span class="brand-mark">学</span>
+        <div>学习日程<small>STUDY PLANNER</small></div></router-link
+      >
+      <div class="sidebar-label">学习工作台</div>
+      <nav aria-label="主导航">
+        <router-link
+          v-for="link in links.slice(0, 3)"
+          :key="link.path"
+          :to="link.path"
+          :class="{
+            active: route.path === link.path,
+            'primary-nav': ['/ai', '/', '/tasks'].includes(link.path),
+          }"
+          ><span class="nav-icon">{{ link.icon }}</span
+          ><span
+            >{{ link.name }}<small>{{ link.sub }}</small></span
+          ></router-link
+        >
+      </nav>
+      <div class="sidebar-focus">
+        <span class="eyebrow">一步一步，慢慢完成</span>
+        <strong>{{ remaining }} <small>项待完成</small></strong>
+        <p>把下一步安排好，留出专注的时间。</p>
+        <router-link to="/tasks"
+          >查看我的任务 <span aria-hidden="true">→</span></router-link
+        >
+      </div>
+      <div class="sidebar-bottom">
+        <span class="avatar">D</span>
+        <div>我的学习空间<small>北京时间 · 本地保存</small></div>
+        <span class="online-dot"></span>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div class="breadcrumb">
+          <span class="breadcrumb-home">学习工作台 / </span>
+          {{ links.find((l) => l.path === route.path)?.name }}
+        </div>
+        <div class="topbar-actions">
+          <span class="mode-tag">{{
+            aiConfigured ? "DeepSeek 已配置" : "AI 未配置 · 规则可用"
+          }}</span
+          ><button class="text-button" @click="historyOpen = true">
+            执行记录 ↗</button
+          ><button
+            class="icon-button"
+            aria-label="刷新数据"
+            :disabled="loading"
+            @click="safely(refresh)"
+          >
+            ↻
+          </button>
+          <el-dropdown
+            trigger="click"
+            popper-class="workspace-settings"
+            @command="router.push($event)"
+          >
+            <button
+              class="settings-button"
+              :class="{ active: ['/import', '/profile'].includes(route.path) }"
+              aria-label="设置"
+            >
+              <span aria-hidden="true">⚙</span> 设置
+            </button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  v-for="link in links.slice(3)"
+                  :key="link.path"
+                  :command="link.path"
+                >
+                  {{ link.icon }} {{ link.name }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+      </header>
+      <div v-if="connectionError" class="connection-error" role="alert">
+        {{ connectionError }} <button @click="safely(refresh)">重新连接</button>
+      </div>
+      <main id="main-content">
+        <router-view v-if="snapshot" />
+        <div v-else class="empty-state">
+          {{
+            loading ? "正在连接学习空间…" : "尚未连接后端，请启动服务后刷新。"
+          }}
+        </div>
+      </main>
+      <footer>
+        学习日程 · 留一点时间给自己
+        <span
+          >数据保存在本机 · 日程版本
+          {{ snapshot?.planningRevision ?? "—" }}</span
+        >
+      </footer>
+    </div>
+    <HistoryDrawer v-model="historyOpen" />
+  </div>
+</template>

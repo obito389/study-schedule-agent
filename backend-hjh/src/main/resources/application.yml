@@ -1,9 +1,9 @@
 server:
   address: 127.0.0.1
-  port: 8085
+  port: 8087
 spring:
   datasource:
-    url: ${TEAM_DB_URL:jdbc:mysql://127.0.0.1:3308/team_assembly?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8}
+    url: ${TEAM_DB_URL:jdbc:mysql://127.0.0.1:3308/final_delivery?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8}
     username: ${TEAM_DB_USER:root}
     password: ${TEAM_DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -28,3 +28,4 @@ team:
     api-key: ${DEEPSEEK_API_KEY:}
     base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
     model: ${DEEPSEEK_MODEL:deepseek-flash}
+

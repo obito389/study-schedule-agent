@@ -29,9 +29,19 @@ import com.studyplanner.common.BusinessException;
     if(fields.containsKey("start"))c.setStartAt(TeamSnapshotService.local(Instant.parse(fields.get("start").asText())));if(fields.containsKey("end"))c.setEndAt(TeamSnapshotService.local(Instant.parse(fields.get("end").asText())));commands.add(c);
    }
    case GENERATE_SCHEDULE -> {
-    if(result.scheduleCandidate()==null||result.scheduleCandidate().blocks().isEmpty())return new ActionSpec(1,key,revision,a.type(),List.of(),Map.of(),a.authorizationScope(),List.of("没有可新增的完整安排，请调整截止时间或耗时"),ActionStatus.NEEDS_CLARIFICATION,List.of());
-    changes.put("blocks",json.mapper.valueToTree(result.scheduleCandidate().blocks()));changes.put("gaps",json.mapper.valueToTree(result.scheduleCandidate().gaps()));
-    int i=0;for(var block:result.scheduleCandidate().blocks()){var c=command(key+"-"+(i++),com.studyplanner.enums.ActionType.CREATE_BLOCK);c.setTaskId(Long.valueOf(block.taskId()));c.setStartAt(TeamSnapshotService.local(block.start()));c.setEndAt(TeamSnapshotService.local(block.end()));commands.add(c);}
+    var candidate=result.scheduleCandidate();
+    if(a.changes().containsKey("start")||a.changes().containsKey("end")||!a.targets().isEmpty()){
+     Instant start=a.changes().containsKey("start")?Instant.parse(a.changes().get("start").asText()):snapshot.now();
+     Instant end=a.changes().containsKey("end")?Instant.parse(a.changes().get("end").asText()):start.plus(Duration.ofDays(14));
+     if(start.isBefore(snapshot.now())||!end.isAfter(start)||Duration.between(start,end).compareTo(Duration.ofDays(14))>0)throw new IllegalArgumentException("排程窗口应位于未来且不超过14天");
+     for(var id:a.targets())if(snapshot.tasks().stream().noneMatch(t -> t.id().equals(id)))throw new IllegalArgumentException("指定任务不存在");
+     var tasks=snapshot.tasks().stream().map(t -> new TaskSnapshot(t.id(),t.courseId(),t.title(),t.deadline().isBefore(end)?t.deadline():end,t.estimatedDurationMinutes(),t.priority(),a.targets().isEmpty()||a.targets().contains(t.id())?t.status():com.studyplanner.contract.TaskStatus.DONE,t.scheduledBlocks())).toList();
+     var restricted=new ScheduleSnapshot(1,start,snapshot.timezone(),snapshot.courses(),tasks,snapshot.lockedBlocks(),snapshot.activeFacts(),snapshot.planningRevision());
+     candidate=new com.studyplanner.planning.GreedyScheduler(new com.studyplanner.planning.HardConstraintValidator(),Clock.fixed(start,TeamSnapshotService.ZONE)).schedule(restricted);
+    }
+    if(candidate==null||candidate.blocks().isEmpty())return new ActionSpec(1,key,revision,a.type(),List.of(),Map.of(),a.authorizationScope(),List.of("没有可新增的完整安排，请调整截止时间或耗时"),ActionStatus.NEEDS_CLARIFICATION,List.of());
+    changes.put("blocks",json.mapper.valueToTree(candidate.blocks()));changes.put("gaps",json.mapper.valueToTree(candidate.gaps()));
+    int i=0;for(var block:candidate.blocks()){var c=command(key+"-"+(i++),com.studyplanner.enums.ActionType.CREATE_BLOCK);c.setTaskId(Long.valueOf(block.taskId()));c.setStartAt(TeamSnapshotService.local(block.start()));c.setEndAt(TeamSnapshotService.local(block.end()));commands.add(c);}
    }
    case MOVE_TASK -> {
     var task=snapshot.tasks().stream().filter(t -> t.id().equals(a.targets().getFirst())).findFirst().orElseThrow(() -> new BusinessException(404,"目标任务不存在"));

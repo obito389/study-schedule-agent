@@ -158,4 +158,56 @@ class TeamAssemblyIntegrationTest {
         assertThat(db.queryForObject("SELECT sample_count FROM learning_stat WHERE user_id=?",Integer.class,user)).isZero();
         assertThat(count("profile_fact")).isEqualTo(2);
     }
+    Map<String,Object> command(String key,String type,Object payload,long revision) {
+        return Map.of("operationKey",key,"baseRevision",revision,"type",type,"authorizationScope","schedule:write:self","payload",payload);
+    }
+    @Test void finalAiSchedulingHonorsExplicitWindow() throws Exception {
+        create();when(model.generate(anyString(),any())).thenReturn(new ModelAdapter.ModelResponse(ActionType.GENERATE_SCHEDULE,List.of(),Map.of("start",json.valueToTree("2026-10-21T10:00:00Z"),"end",json.valueToTree("2026-10-21T12:00:00Z")),List.of(),List.of()));
+        var a=postData("/actions",Map.of("prompt","明天晚上18至20点安排任务","baseRevision",revision()));
+        for(var b:a.path("changes").path("blocks")){assertThat(Instant.parse(b.path("start").asText())).isAfterOrEqualTo(Instant.parse("2026-10-21T10:00:00Z"));assertThat(Instant.parse(b.path("end").asText())).isBeforeOrEqualTo(Instant.parse("2026-10-21T12:00:00Z"));}
+        confirm(a);
+    }
+    Map<String,Object> taskPayload(String title) {
+        return Map.of("title",title,"deadline","2026-10-22T13:00:00Z","durationMinutes",60,"priority",2,"courseId","");
+    }
+    @Test void finalManualCommandRetriesAreBoundAndUndoPersists() throws Exception {
+        String key=UUID.randomUUID().toString();var input=command(key,"CREATE_TASK",taskPayload("最终版任务"),0);
+        var receipt=postData("/workspace/commands",input);postData("/workspace/commands",input);
+        assertThat(count("task")).isEqualTo(1);assertThat(count("plan_draft")).isEqualTo(1);
+        mvc.perform(post("/api/v1/workspace/commands").header("X-User-Id",user).contentType("application/json").content(json.writeValueAsBytes(command(key,"CREATE_TASK",taskPayload("篡改"),0)))) .andExpect(status().isConflict());
+        postData("/workspace/commands",command(UUID.randomUUID().toString(),"UNDO",Map.of("executionId",receipt.path("executionId").asText()),revision()));
+        assertThat(count("task")).isZero();assertThat(getData("/actions").get(1).path("undoable").asBoolean()).isFalse();
+    }
+    @Test void finalRulePreviewAndReceiptUndoShareMemberExecutor() throws Exception {
+        postData("/workspace/commands",command(UUID.randomUUID().toString(),"CREATE_TASK",taskPayload("排程任务"),0));
+        var p=postData("/planning/previews",Map.of());assertThat(count("time_block")).isZero();
+        var r=postData("/workspace/commands",command(UUID.randomUUID().toString(),"APPLY_PLAN",Map.of("previewId",p.path("previewId").asText()),revision()));
+        assertThat(count("time_block")).isEqualTo(2);
+        postData("/workspace/commands",command(UUID.randomUUID().toString(),"UNDO",Map.of("executionId",r.path("executionId").asText()),revision()));
+        assertThat(count("time_block")).isZero();
+    }
+    @Test void finalAiPreviewConfirmCannotBeTampered() throws Exception {
+        modelCreatesScheduledTask();var p=postData("/ai/previews",Map.of("instruction","请安排任务"));
+        assertThat(p.path("status").asText()).isEqualTo("NEEDS_CONFIRMATION");assertThat(count("task")).isZero();
+        postData("/ai/drafts/"+p.path("draftId").asText()+"/confirm",Map.of("title","恶意替换"));
+        assertThat(getData("/schedule").path("tasks").get(0).path("title").asText()).isEqualTo("AI 指定时段");
+    }
+    @Test void finalCompleteFeedbackCannotBeUndoneThroughReceipts() throws Exception {
+        var s=postData("/workspace/commands",command(UUID.randomUUID().toString(),"CREATE_TASK",taskPayload("反馈任务"),0));
+        var id=getData("/schedule").path("tasks").get(0).path("id").asText();
+        var r=postData("/workspace/commands",command(UUID.randomUUID().toString(),"COMPLETE_TASK",Map.of("taskId",id,"actualMinutes",80),revision()));
+        assertThat(r.path("undoable").asBoolean()).isFalse();assertThat(count("execution_log")).isEqualTo(1);
+    }
+    @Test void finalCourseAndFixedAdaptersUseRealMemberRows() throws Exception {
+        postData("/workspace/fixed",Map.of("name","软件工程","kind","COURSE","start","2026-10-21T02:00:00Z","end","2026-10-21T03:00:00Z","baseRevision",0));
+        var course=getData("/schedule").path("courses").get(0).path("id").asText();
+        mvc.perform(delete("/api/v1/workspace/fixed/COURSE/"+course).header("X-User-Id",user).param("baseRevision",String.valueOf(revision()))).andExpect(status().isOk());
+        assertThat(getData("/schedule").path("courses").size()).isZero();
+    }
+    @Test void finalCommandsRejectUnsupportedTypeAndWrongScope() throws Exception {
+        for(var c:List.of(command(UUID.randomUUID().toString(),"DELETE_DATABASE",Map.of(),0),Map.of("operationKey",UUID.randomUUID().toString(),"baseRevision",0,"type","CREATE_TASK","authorizationScope","admin","payload",taskPayload("越权")))){
+            mvc.perform(post("/api/v1/workspace/commands").header("X-User-Id",user).contentType("application/json").content(json.writeValueAsBytes(c))).andExpect(status().is4xxClientError());
+        }
+        assertThat(count("task")).isZero();assertThat(revision()).isZero();
+    }
 }

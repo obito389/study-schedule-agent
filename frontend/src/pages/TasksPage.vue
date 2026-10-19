@@ -1,56 +1,201 @@
-<template>
- <el-card shadow="never"><template #header><div class="toolbar"><strong>任务管理</strong><div><el-button @click="load">刷新</el-button><el-button type="primary" :disabled="loading || !snapshot" @click="edit()">新建任务</el-button></div></div></template>
- <el-table :data="snapshot?.tasks ?? []" v-loading="loading" border>
-  <el-table-column prop="title" label="任务" min-width="180" />
-  <el-table-column label="截止时间（北京时间）" min-width="180"><template #default="{row}">{{ beijing(row.deadline).replace('T',' ') }}</template></el-table-column>
-  <el-table-column prop="estimatedDurationMinutes" label="预计分钟" width="100" />
-  <el-table-column label="状态" width="110"><template #default="{row}">{{ row.status === 'TODO' && row.scheduledBlocks.length ? '已安排' : labels[row.status] }}</template></el-table-column>
-  <el-table-column label="操作" min-width="230"><template #default="{row}"><template v-if="row.status !== 'DONE' && row.status !== 'CANCELLED'"><el-button link type="primary" @click="edit(row)">编辑</el-button><el-button link type="success" @click="complete(row)">完成并反馈</el-button><el-button link type="danger" @click="cancel(row)">取消</el-button></template></template></el-table-column>
- </el-table>
- <el-empty v-if="!loading && !snapshot?.tasks.length" description="还没有任务，请先新建或从导入页面添加" />
- <el-alert title="创建任务后，可在日程日历中生成规则排程，核对预览后确认保存。" type="info" :closable="false" class="hint" />
- </el-card>
- <el-dialog v-model="open" :title="editingId ? '编辑任务' : '新建任务'" width="500px" :close-on-click-modal="false">
-  <el-form label-position="top" @submit.prevent="save">
-   <el-form-item label="任务名称"><el-input v-model="form.title" maxlength="100" /></el-form-item>
-   <el-form-item label="截止时间（北京时间）"><el-input v-model="form.deadline" type="datetime-local" /></el-form-item>
-   <el-form-item label="预计剩余耗时（分钟）"><el-input-number v-model="form.durationMinutes" :min="1" :max="10080" :step="30" /></el-form-item>
-   <el-form-item label="优先级（数值越大越优先）"><el-input-number v-model="form.priority" :min="1" :max="3" /></el-form-item>
-  </el-form>
-  <template #footer><el-button @click="open=false">返回</el-button><el-button type="primary" :loading="saving" @click="save">确认保存任务</el-button></template>
- </el-dialog>
-</template>
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { http } from '@/api/client'
-import { getScheduleSnapshot } from '@/api/schedule'
-import type { ScheduleSnapshot, TaskSnapshot } from '@/types/contract'
-import { beijing, utc, futureDeadline } from '@/utils/time'
-const snapshot=ref<ScheduleSnapshot|null>(null),loading=ref(false),saving=ref(false),open=ref(false),editingId=ref<string|null>(null)
-const baseRevision=ref(0), operationKey=ref('')
-const form=reactive({title:'',deadline:futureDeadline(),durationMinutes:60,priority:2})
-const labels:Record<string,string>={TODO:'待安排',IN_PROGRESS:'进行中',DONE:'已完成',CANCELLED:'已取消'}
-async function load(){loading.value=true;try{snapshot.value=await getScheduleSnapshot()}catch(e){ElMessage.error((e as Error).message)}finally{loading.value=false}}
-function edit(task?:TaskSnapshot){editingId.value=task?.id ?? null;form.title=task?.title??'';form.deadline=task?beijing(task.deadline).slice(0,16):futureDeadline();form.durationMinutes=task?.estimatedDurationMinutes??60;form.priority=task?.priority??2;baseRevision.value=snapshot.value?.planningRevision??0;operationKey.value=crypto.randomUUID();open.value=true}
-async function save(){
- if(!form.title.trim()||!form.deadline){ElMessage.warning('请填写名称和截止时间');return}
- saving.value=true
- try{const body={...form,title:form.title.trim(),deadline:utc(form.deadline),operationKey:operationKey.value,baseRevision:baseRevision.value,courseId:null};
-  const response=editingId.value?await http.put<ScheduleSnapshot>(`/workspace/tasks/${editingId.value}`,body):await http.post<ScheduleSnapshot>('/workspace/tasks',body)
-  snapshot.value=response.data;open.value=false;ElMessage.success('任务已保存')
- }catch(e){ElMessage.error((e as Error).message);await load()}finally{saving.value=false}
+import { computed, ref } from "vue";
+import { ElMessageBox } from "element-plus";
+import { snapshot, runCommand, safely } from "../composables/usePlanner";
+import { formatTime } from "../lib/time";
+import { visibleTasks } from "../lib/tasks";
+import TaskEditor from "../components/TaskEditor.vue";
+import PlanPreview from "../components/PlanPreview.vue";
+import type { TaskSnapshot } from "../types/contracts";
+const filter = ref("ACTIVE"),
+  sort = ref("deadline"),
+  query = ref(""),
+  editor = ref(false),
+  selected = ref<TaskSnapshot | null>(null),
+  busy = ref(false);
+const statuses: Record<string, string> = {
+  TODO: "待安排",
+  IN_PROGRESS: "进行中",
+  DONE: "已完成",
+  CANCELLED: "已取消",
+};
+const tasks = computed(() =>
+  visibleTasks(
+    snapshot.value?.tasks ?? [],
+    filter.value,
+    query.value,
+    sort.value,
+  ),
+);
+const hasTasks = computed(() => Boolean(snapshot.value?.tasks.length));
+function clearFilters() {
+  query.value = "";
+  filter.value = "ALL";
 }
-async function complete(task:TaskSnapshot){try{
- const {value}=await ElMessageBox.prompt('请输入本次任务实际耗时（分钟）','完成任务与反馈',{inputValue:String(task.estimatedDurationMinutes),inputPattern:/^[1-9][0-9]{0,4}$/,inputErrorMessage:'请输入正整数',confirmButtonText:'确认完成',cancelButtonText:'返回'})
- snapshot.value=(await http.post<ScheduleSnapshot>(`/workspace/tasks/${task.id}/complete`,{operationKey:crypto.randomUUID(),baseRevision:snapshot.value!.planningRevision,actualMinutes:Number(value)})).data;ElMessage.success('已完成，并记录实际耗时')
- }catch(e){if(e!=='cancel'&&e!=='close')ElMessage.error((e as Error).message)}
+function edit(task: TaskSnapshot | null) {
+  selected.value = task;
+  editor.value = true;
 }
-async function cancel(task:TaskSnapshot){try{
- await ElMessageBox.confirm('取消后将释放该任务的已排时间。','确认取消任务',{confirmButtonText:'确认取消',cancelButtonText:'返回'})
- snapshot.value=(await http.post<ScheduleSnapshot>(`/workspace/tasks/${task.id}/cancel`,{operationKey:crypto.randomUUID(),baseRevision:snapshot.value!.planningRevision,actualMinutes:1})).data;ElMessage.success('已取消')
- }catch(e){if(e!=='cancel'&&e!=='close')ElMessage.error((e as Error).message)}
+async function cancel(t: TaskSnapshot) {
+  try {
+    await ElMessageBox.confirm(`取消“${t.title}”并移除其时间块？`, "确认取消", {
+      confirmButtonText: "确认取消任务",
+      cancelButtonText: "返回",
+    });
+  } catch {
+    return;
+  }
+  busy.value = true;
+  await safely(() => runCommand("CANCEL_TASK", { taskId: t.id }));
+  busy.value = false;
 }
-onMounted(load)
+async function complete(t: TaskSnapshot) {
+  let minutes: number;
+  try {
+    const result = await ElMessageBox.prompt(
+      "请输入实际耗时（分钟），用于更新耗时估计。",
+      "完成任务与反馈",
+      {
+        inputValue: String(t.estimatedDurationMinutes),
+        inputPattern: /^[1-9]\d{0,4}$/,
+        inputErrorMessage: "请输入正整数",
+        confirmButtonText: "确认完成",
+        cancelButtonText: "返回",
+      },
+    );
+    minutes = Number(result.value);
+  } catch {
+    return;
+  }
+  busy.value = true;
+  await safely(() =>
+    runCommand("COMPLETE_TASK", { taskId: t.id, actualMinutes: minutes }),
+  );
+  busy.value = false;
+}
 </script>
-<style scoped>.toolbar{display:flex;justify-content:space-between;align-items:center}.hint{margin-top:18px}</style>
+<template>
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow">一步一步，完成目标</div>
+      <h1>任务清单<span class="heading-dot">.</span></h1>
+      <p>把学习目标变成清晰、可安排的一小步。</p>
+    </div>
+    <div class="button-group">
+      <PlanPreview /><button
+        class="secondary"
+        @click="edit(null)"
+        data-testid="new-task"
+      >
+        ＋ 新建任务
+      </button>
+    </div>
+  </div>
+  <section class="panel tasks-panel">
+    <div class="panel-toolbar">
+      <div class="segmented">
+        <button
+          v-for="f in [
+            { id: 'ACTIVE', label: '待完成' },
+            { id: 'DONE', label: '已完成' },
+            { id: 'ALL', label: '全部' },
+          ]"
+          :key="f.id"
+          :class="{ selected: filter === f.id }"
+          :aria-pressed="filter === f.id"
+          @click="filter = f.id"
+        >
+          {{ f.label }}
+        </button>
+      </div>
+      <input
+        v-model="query"
+        class="search-input"
+        placeholder="搜索任务名称"
+        aria-label="搜索任务"
+      />
+    </div>
+    <div class="task-results-bar">
+      <span role="status"
+        >{{ tasks.length }} 项任务<span v-if="query.trim()">
+          · 搜索“{{ query.trim() }}”</span
+        ></span
+      >
+      <select v-model="sort" aria-label="任务排序">
+        <option value="deadline">截止时间优先</option>
+        <option value="priority">优先级优先</option>
+      </select>
+    </div>
+    <div v-if="!tasks.length" class="empty-state">
+      <span class="empty-icon">☑</span>
+      <template v-if="hasTasks || query.trim() || filter !== 'ACTIVE'">
+        <h3>这里暂时没有匹配的任务</h3>
+        <p>换个关键词，或查看全部任务。</p>
+        <button class="secondary" @click="clearFilters">清除筛选</button>
+      </template>
+      <template v-else>
+        <h3>从一个小目标开始</h3>
+        <p>创建任务后，就可以为它安排专注的时间。</p>
+        <button class="primary" @click="edit(null)">新建第一个任务</button>
+      </template>
+    </div>
+    <div v-else class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>任务 / 课程</th>
+            <th>截止时间</th>
+            <th>预计耗时</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="t in tasks" :key="t.id">
+            <td>
+              <strong>{{ t.title }}</strong
+              ><small class="table-sub"
+                >{{
+                  snapshot?.courses.find((c) => c.id === t.courseId)?.name ??
+                  "独立任务"
+                }}
+                · 优先级 {{ t.priority }}</small
+              >
+            </td>
+            <td data-label="截止时间">{{ formatTime(t.deadline) }}</td>
+            <td data-label="预计耗时">{{ t.estimatedDurationMinutes }} 分钟</td>
+            <td data-label="状态">
+              <span
+                :class="[
+                  'badge',
+                  t.status === 'DONE'
+                    ? 'green'
+                    : t.status === 'CANCELLED'
+                      ? 'neutral'
+                      : 'blue',
+                ]"
+                >{{
+                  t.status === "TODO" && t.scheduledBlocks.length
+                    ? "已安排"
+                    : statuses[t.status]
+                }}</span
+              >
+            </td>
+            <td>
+              <div
+                v-if="!['DONE', 'CANCELLED'].includes(t.status)"
+                class="row-actions"
+              >
+                <button @click="edit(t)" :disabled="busy">编辑</button
+                ><button @click="complete(t)" :disabled="busy">完成</button
+                ><button @click="cancel(t)" :disabled="busy">取消</button>
+              </div>
+              <span v-else class="muted">—</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <TaskEditor v-model="editor" :task="selected" />
+</template>

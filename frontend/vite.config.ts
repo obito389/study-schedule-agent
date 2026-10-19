@@ -1,24 +1,32 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { fileURLToPath, URL } from 'node:url'
-
-// 后端统一走 /api/v1，开发期代理到 Spring Boot (默认 8080)。
-// 后端未就绪时前端启用 mock 回退（见 src/api/client.ts），不依赖代理。
+import { defineConfig } from "vitest/config";
+import vue from "@vitejs/plugin-vue";
 export default defineConfig({
   plugins: [vue()],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  },
   server: {
-    host: '127.0.0.1',
-    port: 5179,
+    port: 5181,
+    strictPort: true,
     proxy: {
-      '/api': {
-        target: process.env.TEAM_API_URL ?? 'http://127.0.0.1:8085',
-        changeOrigin: true
-      }
-    }
-  }
-})
+      "/api": {
+        target: process.env.PLANNER_API_URL ?? "http://127.0.0.1:8087",
+      },
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          calendar: [
+            "@fullcalendar/core",
+            "@fullcalendar/vue3",
+            "@fullcalendar/timegrid",
+            "@fullcalendar/daygrid",
+          ],
+          ui: ["element-plus"],
+          vue: ["vue", "vue-router"],
+        },
+      },
+    },
+  },
+  test: { include: ["src/**/*.test.ts"] },
+});
+

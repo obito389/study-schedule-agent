@@ -28,3 +28,9 @@ Thumbs.db
 !.env.example
 application-local.yml
 application-local.yaml
+
+delivery/materials/
+delivery/reports/
+delivery/*.zip
+delivery/*.mp4
+
