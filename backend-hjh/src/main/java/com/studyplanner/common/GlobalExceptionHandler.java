@@ -57,13 +57,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponse<Void>> handleRuntimeException(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error(500, "服务器内部错误: " + e.getMessage()));
+                .body(ApiResponse.error(500, "服务器内部错误，请稍后重试"));
     }
 
     /**
      * 业务 code 与 HTTP 状态码映射
      */
     private HttpStatus resolveStatus(int code) {
+        if (code >= 400 && code <= 599) return HttpStatus.valueOf(code);
         if (code == 404) {
             return HttpStatus.NOT_FOUND;
         }

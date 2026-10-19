@@ -33,7 +33,7 @@
             size="small"
             type="primary"
             link
-            :disabled="row.state === 'DELETED' || row.state === 'EXPIRED'"
+            :disabled="row.key !== 'planning.dailyLimitMinutes' || row.state === 'DELETED' || row.state === 'EXPIRED'"
             @click="onEdit(row)"
           >
             修改
@@ -70,7 +70,7 @@
           <el-input v-model="editForm.valueText" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="置信度">
-          <el-slider v-model="editForm.strength" :min="0" :max="1" :step="0.05" />
+          <el-slider disabled v-model="editForm.strength" :min="0" :max="1" :step="0.05" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -123,7 +123,7 @@ function stateTagType(s: ProfileFactState) {
 function onEdit(row: ProfileFact) {
   editForm.key = row.key
   editForm.valueText = formatValue(row.value)
-  editForm.strength = row.strength
+  editForm.strength = 1
   editVisible.value = true
 }
 
@@ -156,11 +156,11 @@ async function onDeny(row: ProfileFact) {
       '确认否认',
       { type: 'warning' }
     )
-    await denyProfileFact(row.key)
+    await denyProfileFact(row.key, row.version)
     ElMessage.success('已否认')
     emit('changed')
-  } catch {
-    /* 用户取消 */
+  } catch (err) {
+    if (err !== 'cancel' && err !== 'close') ElMessage.error((err as Error).message)
   }
 }
 
@@ -171,11 +171,11 @@ async function onDelete(row: ProfileFact) {
       '确认删除',
       { type: 'warning' }
     )
-    await deleteProfileFact(row.key)
+    await deleteProfileFact(row.key, row.version)
     ElMessage.success('已删除')
     emit('changed')
-  } catch {
-    /* 用户取消 */
+  } catch (err) {
+    if (err !== 'cancel' && err !== 'close') ElMessage.error((err as Error).message)
   }
 }
 

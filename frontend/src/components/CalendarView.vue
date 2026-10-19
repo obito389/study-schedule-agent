@@ -6,6 +6,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { CalendarOptions } from '@fullcalendar/core'
+import zhCn from '@fullcalendar/core/locales/zh-cn'
+import { beijing } from '@/utils/time'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -74,8 +77,8 @@ function toCalendarEvent(
   return {
     id: block.id,
     title,
-    start: block.start,
-    end: block.end,
+    start: beijing(block.start),
+    end: beijing(block.end),
     backgroundColor: bg,
     borderColor: border,
     textColor: text,
@@ -83,7 +86,7 @@ function toCalendarEvent(
   }
 }
 
-const calendarOptions = computed(() => ({
+const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   initialView: 'timeGridWeek',
   headerToolbar: {
@@ -91,11 +94,11 @@ const calendarOptions = computed(() => ({
     center: 'title',
     right: 'dayGridMonth,timeGridWeek,timeGridDay'
   },
-  locale: 'zh-cn',
-  initialDate: props.snapshot?.now ?? '2026-09-13',
+  locale: zhCn,
+  initialDate: props.snapshot ? beijing(props.snapshot.now) : new Date().toISOString(),
   firstDay: 1,
-  slotMinTime: '07:00:00',
-  slotMaxTime: '22:00:00',
+  slotMinTime: '00:00:00',
+  slotMaxTime: '24:00:00',
   slotDuration: '00:30:00', // 与后端 30 分钟时间槽粒度一致
   allDaySlot: false,
   height: 'auto',

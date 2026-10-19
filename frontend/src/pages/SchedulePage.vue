@@ -7,14 +7,16 @@
           <el-tag v-if="loading" type="info" size="small">加载中…</el-tag>
         </div>
         <div class="toolbar-right">
+          <el-button @click="calendarSettings=true">课程 / 固定时段</el-button>
           <el-input
             v-model="prompt"
-            placeholder="例如：把 task-001 移到周二下午"
+            placeholder="例如：明晚八点复习数据库一小时"
             class="prompt-input"
             clearable
             @keyup.enter="onRequestAction"
           />
-          <el-button type="primary" :loading="actionLoading" @click="onRequestAction">
+          <el-button :disabled="loading || !snapshot" :loading="actionLoading" @click="onRulePlan">规则排程</el-button>
+          <el-button type="primary" :disabled="loading || !snapshot" :loading="actionLoading" @click="onRequestAction">
             生成动作预览
           </el-button>
         </div>
@@ -22,13 +24,14 @@
     </el-card>
 
     <CalendarView :snapshot="snapshot" />
+    <CalendarSettingsDialog v-model="calendarSettings" @changed="loadSnapshot" />
 
     <ActionPreviewDialog
       v-model="dialogVisible"
       :action="currentAction"
       @confirmed="onActionConfirmed"
       @undone="onActionUndone"
-      @refresh="loadSnapshot"
+      @refresh="onConflictRefresh"
       @close="dialogVisible = false"
     />
   </div>
@@ -39,11 +42,13 @@ import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { ActionSpec, ScheduleSnapshot } from '@/types/contract'
 import { getScheduleSnapshot } from '@/api/schedule'
-import { requestAction } from '@/api/actions'
+import { requestAction, requestRulePlan } from '@/api/actions'
 import CalendarView from '@/components/CalendarView.vue'
+import CalendarSettingsDialog from '@/components/CalendarSettingsDialog.vue'
 import ActionPreviewDialog from '@/components/ActionPreviewDialog.vue'
 
 const snapshot = ref<ScheduleSnapshot | null>(null)
+const calendarSettings = ref(false)
 const loading = ref(false)
 const actionLoading = ref(false)
 const prompt = ref('')
@@ -63,10 +68,11 @@ async function loadSnapshot() {
 
 async function onRequestAction() {
   if (!snapshot.value) return
+  if (!prompt.value.trim()) { ElMessage.warning('请输入学习要求'); return }
   actionLoading.value = true
   try {
     const action = await requestAction(
-      prompt.value || '把 task-001 移到 9 月 14 日 19:00',
+      prompt.value.trim(),
       snapshot.value.planningRevision
     )
     currentAction.value = action
@@ -85,7 +91,21 @@ function onActionConfirmed(action: ActionSpec) {
 }
 
 function onActionUndone(_action: ActionSpec) {
+  dialogVisible.value = false
+  currentAction.value = null
   loadSnapshot()
+}
+async function onRulePlan() {
+  if (!snapshot.value) return
+  actionLoading.value = true
+  try { currentAction.value = await requestRulePlan(snapshot.value.planningRevision); dialogVisible.value = true }
+  catch (err) { ElMessage.error((err as Error).message) }
+  finally { actionLoading.value = false }
+}
+async function onConflictRefresh() {
+  await loadSnapshot()
+  if (currentAction.value?.type === 'GENERATE_SCHEDULE') await onRulePlan()
+  else await onRequestAction()
 }
 
 onMounted(() => {
@@ -118,7 +138,8 @@ onMounted(() => {
   display: flex;
   gap: 8px;
   flex: 1;
-  max-width: 560px;
+  max-width: 900px;
+  flex-wrap: wrap;
 }
 .prompt-input {
   flex: 1;

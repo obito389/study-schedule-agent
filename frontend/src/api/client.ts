@@ -3,15 +3,13 @@ import type { ContractError } from '@/types/contract'
 
 /**
  * 统一 axios 实例。所有业务接口走 /api/v1。
- * 后端未就绪时，各 api 模块内启用 mock 回退（不发起真实请求），
- * 保证断网可演示；后端上线后把 USE_MOCK 置为 false 即可。
+ * 所有页面请求组员后端；连接失败直接显示错误。
  */
-export const USE_MOCK = true
 
 export const http = axios.create({
   baseURL: '/api/v1',
-  timeout: 10000,
-  headers: { 'Content-Type': 'application/json' }
+  timeout: 60000,
+  headers: { 'Content-Type': 'application/json', 'X-User-Id': '1' }
 })
 
 /** 统一错误结构：后端返回 { code, message, objectIds } 或 409 冲突体。 */
@@ -29,7 +27,13 @@ export class ApiError extends Error {
 }
 
 http.interceptors.response.use(
-  (resp) => resp,
+  (resp) => {
+    if (resp.data && typeof resp.data.code === 'number' && 'data' in resp.data) {
+      if (resp.data.code !== 0) throw new ApiError(String(resp.data.code), resp.data.message, [], resp.status)
+      resp.data = resp.data.data
+    }
+    return resp
+  },
   (error: AxiosError<any>) => {
     const status = error.response?.status ?? 0
     const body = error.response?.data

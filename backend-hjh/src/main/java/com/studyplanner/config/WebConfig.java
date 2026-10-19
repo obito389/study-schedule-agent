@@ -11,14 +11,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final CurrentUserInterceptor currentUserInterceptor;
+    private final com.studyplanner.team.LegacyWriteGuard legacyGuard;
 
-    public WebConfig(CurrentUserInterceptor currentUserInterceptor) {
+    public WebConfig(CurrentUserInterceptor currentUserInterceptor,com.studyplanner.team.LegacyWriteGuard legacyGuard) {
         this.currentUserInterceptor = currentUserInterceptor;
+        this.legacyGuard=legacyGuard;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(currentUserInterceptor)
                 .addPathPatterns("/api/**");
+        registry.addInterceptor(legacyGuard).addPathPatterns("/api/**");
     }
 }

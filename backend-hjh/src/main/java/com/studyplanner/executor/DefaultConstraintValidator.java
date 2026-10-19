@@ -278,7 +278,7 @@ public class DefaultConstraintValidator implements ActionConstraintValidator {
         LocalDateTime s = a.getStartAt();
         LocalDateTime e = a.getEndAt();
         for (TimeBlock b : timeBlockRepository.findOverlapping(userId, s, e)) {
-            if (b.getStatus() == BlockStatus.CANCELLED) {
+            if (b.getStatus() != BlockStatus.PLANNED) {
                 continue;
             }
             if (selfId != null && selfId.equals(b.getId())) {

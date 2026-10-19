@@ -50,6 +50,9 @@ public class UndoExecutor {
     private final TimeBlockRepository timeBlockRepository;
     private final AgentActionRepository agentActionRepository;
     private final ObjectMapper objectMapper;
+    private UndoConstraintGuard constraintGuard;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    public void setConstraintGuard(UndoConstraintGuard guard){this.constraintGuard=guard;}
 
     public UndoExecutor(AppUserRepository userRepository,
                         TaskRepository taskRepository,
@@ -145,6 +148,8 @@ public class UndoExecutor {
                     "版本冲突：当前版本=" + baseRev + "，提交基于版本=" + request.getBaseRevision()
                             + "，请刷新后重试");
         }
+
+        if(constraintGuard!=null)constraintGuard.validate(userId,actions);
 
         // 3. 单事务逐个反向回滚（任一失败整批回滚）
         long newRev = baseRev + 1;

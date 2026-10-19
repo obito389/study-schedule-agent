@@ -40,6 +40,9 @@ public class ActionCommand {
     private TaskStatus status;
     private String taskType;
     private Long courseId;
+    private Long importJobId;
+    public Long getImportJobId(){return importJobId;}
+    public void setImportJobId(Long value){importJobId=value;}
     private Integer initialEstimateMin;
 
     // ---------------- 步骤（TaskStep）字段 ----------------

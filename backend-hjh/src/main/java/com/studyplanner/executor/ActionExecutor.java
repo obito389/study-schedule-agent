@@ -50,6 +50,9 @@ public class ActionExecutor {
     private final AgentActionRepository agentActionRepository;
     private final ActionConstraintValidator constraintValidator;
     private final ObjectMapper objectMapper;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private com.studyplanner.business.PlanDraftRepository draftOwnershipRepository;
+
 
     public ActionExecutor(AppUserRepository userRepository,
                           TaskRepository taskRepository,
@@ -166,6 +169,9 @@ public class ActionExecutor {
         AppUser user = userRepository.findByIdForUpdate(userId)
                 .orElseThrow(() -> new BusinessException(404, "用户不存在: id=" + userId));
         long baseRev = user.getPlanningRevision();
+        if(request.getPlanDraftId()!=null && draftOwnershipRepository!=null && draftOwnershipRepository.findById(request.getPlanDraftId()).filter(d -> userId.equals(d.getUserId())).isEmpty())
+            throw new BusinessException(403,"计划草案不存在或不属于当前用户");
+
 
         // 2. 幂等检查（优先于乐观锁，保证网络抖动下的重试始终安全）
         List<String> keys = request.getActions().stream()
@@ -272,7 +278,15 @@ public class ActionExecutor {
 
     private ActionItemResult createTask(ActionCommand a, Ctx ctx) {
         Task saved = taskRepository.save(buildTask(a, ctx.userId));
-        return record(a, ctx, "TASK", saved.getId(), null, toJson(saved));
+        ActionItemResult result=record(a, ctx, "TASK", saved.getId(), null, toJson(saved));
+        if(a.getStartAt()!=null && a.getEndAt()!=null){
+            TimeBlock block=buildBlock(a,ctx.userId,ctx.planDraftId);block.setTaskId(saved.getId());
+            TimeBlock persisted=timeBlockRepository.save(block);
+            ActionCommand child=new ActionCommand();child.setType(ActionType.CREATE_BLOCK);
+            child.setOperationKey("auto-block-"+java.util.UUID.nameUUIDFromBytes(a.getOperationKey().getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+            record(child,ctx,"BLOCK",persisted.getId(),null,toJson(persisted));
+        }
+        return result;
     }
 
     private ActionItemResult updateTask(ActionCommand a, Ctx ctx) {
@@ -368,6 +382,7 @@ public class ActionExecutor {
         t.setStatus(a.getStatus() == null ? TaskStatus.TODO : a.getStatus());
         t.setTaskType(a.getTaskType());
         t.setCourseId(a.getCourseId());
+        t.setImportJobId(a.getImportJobId());
         t.setInitialEstimateMin(a.getInitialEstimateMin());
         return t;
     }

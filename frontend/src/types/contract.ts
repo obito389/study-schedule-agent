@@ -91,7 +91,7 @@ export interface CourseSnapshot {
 /** 对应 TaskSnapshot record。deadline 为 ISO-8601 UTC 字符串。 */
 export interface TaskSnapshot {
   id: string
-  courseId: string
+  courseId: string | null
   title: string
   deadline: string
   estimatedDurationMinutes: number

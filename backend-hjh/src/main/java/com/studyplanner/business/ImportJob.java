@@ -78,6 +78,11 @@ public class ImportJob {
         }
     }
 
+    @Column(name="contract_json", columnDefinition="LONGTEXT")
+    private String contractJson;
+    public String getContractJson() { return contractJson; }
+    public void setContractJson(String value) { contractJson=value; }
+
     public ImportJob() {}
 
     public Long getId() { return id; }

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog
+  <el-dialog v-if="action"
     v-model="visible"
     title="动作预览"
     width="560px"
@@ -73,7 +73,7 @@
         <!-- 已执行：提供撤销入口 -->
         <template v-if="action.status === 'APPLIED'">
           <el-button @click="emit('close')">关闭</el-button>
-          <el-button type="warning" :loading="undoLoading" @click="onUndo">
+          <el-button v-if="action.type !== 'QUERY_SCHEDULE'" type="warning" :loading="undoLoading" @click="onUndo">
             撤销此操作
           </el-button>
         </template>

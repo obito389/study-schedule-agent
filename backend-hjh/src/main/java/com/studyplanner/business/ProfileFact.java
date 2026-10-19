@@ -22,7 +22,7 @@ public class ProfileFact {
     @NotNull(message = "用户ID不能为空")
     private Long userId;
 
-    @Column(nullable = false, length = 64)
+    @Column(name="`key`", nullable = false, length = 64)
     @NotBlank(message = "事实key不能为空")
     @Size(max = 64, message = "事实key不能超过64个字符")
     private String key;
@@ -71,6 +71,11 @@ public class ProfileFact {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    @Column(name="contract_json", columnDefinition="LONGTEXT")
+    private String contractJson;
+    public String getContractJson() { return contractJson; }
+    public void setContractJson(String value) { contractJson=value; }
 
     public ProfileFact() {}
 

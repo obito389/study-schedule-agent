@@ -7,21 +7,23 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.16</version>
         <relativePath/>
     </parent>
 
     <groupId>com.studyplanner</groupId>
-    <artifactId>study-planner-backend</artifactId>
+    <artifactId>study-planner-team-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>study-planner-backend</name>
     <description>学习日程 Agent 后端</description>
 
     <properties>
         <java.version>21</java.version>
+        <test.socket.dir>${java.io.tmpdir}</test.socket.dir>
     </properties>
 
     <dependencies>
+        <dependency><groupId>com.studyplanner</groupId><artifactId>study-planner-backend</artifactId><version>0.0.1-SNAPSHOT</version></dependency>
         <!-- Web / REST API -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,10 +70,14 @@
 
     <build>
         <plugins>
+            <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><configuration><systemPropertyVariables><jdk.net.unixdomain.tmpdir>${test.socket.dir}</jdk.net.unixdomain.tmpdir></systemPropertyVariables></configuration></plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile><id>windows-test-sockets</id><activation><os><family>Windows</family></os></activation><properties><test.socket.dir>${env.PUBLIC}</test.socket.dir></properties></profile>
+    </profiles>
 </project>
